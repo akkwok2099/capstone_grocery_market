@@ -1,1 +1,0 @@
-# capstone_shopping_list
