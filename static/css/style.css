@@ -1,0 +1,11 @@
+.footer{
+  position:fixed;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+}
+
+iframe#access{
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+}

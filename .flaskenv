@@ -1,0 +1,3 @@
+FLASK_APP=capstone
+FLASK_ENV=development
+FLASK_DEBUG=1

@@ -1,0 +1,64 @@
+{% block title %} UdaciMarket Management System {% endblock %}
+
+{% block header %}
+<div class="jumbotron p-1">
+  <div class="well text-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <img src="static/img/store-icon.png" alt="Our Logo" width="25px" height="25px" class="ml-3" />
+      <a class="navbar-brand ml-1" href="#">UdaciMarket</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse offset-sm-1" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto ml-2">
+          <li class="nav-item active mr-2">
+            <!-- <button class="nav-link btn-outline-primary" onclick="linkHome(event)">Home</a> -->
+              <a class="nav-link" href="/home">Home</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-primary" onclick="linkAisles(event)">Aisles</a> -->
+            <a class="nav-link" href="/aisles">Aisles</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-success" onclick="linkProducts(event)">Products</button> -->
+            <a class="nav-link" href="/products">Products</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-success" onclick="linkCustomers(event)">Customers</button> -->
+            <a class="nav-link" href="/customers">Customers</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-success" onclick="linkDepartments(event)">Departments</button> -->
+            <a class="nav-link" href="/departments">Departments</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-success" onclick="linkEmployees(event)">Employees</button> -->
+            <a class="nav-link" href="/employees">Employees</a>
+          </li>
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-success" onclick="linkSuppliers(event)">Supplies</button> -->
+            <a class="nav-link" href="/suppliers">Suppliers</a>
+          </li>
+          <!-- Will be implemented later, not needed for capstone -->
+          <li class="nav-item mr-2">
+            <!-- <button class="nav-link btn-outline-danger" onclick="linkPurchases(event)" title="!! Under Construction !!" disabled>Orders</button> -->
+            <a class="nav-link" href="/purchases" title="!! Under Construction !!">Orders</a>
+          </li>
+        </ul>
+        <!-- {% if accessinfo is not none %} -->
+          <!-- <iframe name="access" id="access">{{accessinfo['access']}}</iframe> -->
+        <!-- {% endif %} -->
+        {% if userinfo is not none %}
+          <div class="mr-2 mt-1">
+            <h6>Welcome {{userinfo['nickname']}}</h6>
+          </div>
+        {% endif %}
+        <form class="form-inline my-2 my-lg-0 mr-5 ml-2">
+          <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
+        </form>
+      </div>
+    </nav>
+  </div>
+</div>
+{% endblock%}

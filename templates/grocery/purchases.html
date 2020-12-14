@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% include 'footer.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col md-12">
+      <div class="jumbotron p-1">
+        <h2>Manage <b>Orders</b> 
+          <button type="button" class="btn btn-success float-right" data-toggle="modal"
+            data-target="#mymodal">Add Order
+          </button>
+        </h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                  <span aria-hidden="true">x</span>
+                </button>
+                {{message}}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <table class="table table-hover table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price per Cost Unit</th>
+            <th>Cost Unit</th>
+            <th>Department</th>
+            <th>Quantity in Stock</th>
+            <th>Brand</th>
+            <th>Production Date</th>
+            <th>Best before Date</th>
+            <th>PLU</th>
+            <th>UPC</th>
+            <th>Organic</th>
+            <th>Cut</th>
+            <th>Animal</th>
+            <th>Aisle</th>
+          </tr>
+
+          {% for row in data %}
+            <tr>
+              <td>{{row.id}}</td>
+              <td>{{row.name[0]}}</td>
+              <td>{{row.price_per_cost_unit[0]}}</td>
+              <td>{{row.cost_unit[0]}}</td>
+              <td>{{row.department_id[0]}} - {{row.department_name}}</td>
+              <td>{{row.quantity_in_stock[0]}}</td>
+              <td>{{row.brand[0]}}</td>
+              <td>{{row.production_date[0]}}</td>
+              <td>{{row.best_before_date[0]}}</td>
+              <td>{{row.plu[0]}}</td>
+              <td>{{row.upc[0]}}</td>
+              <td>{{row.organic[0]}}</td>
+              <td>{{row.cut[0]}}</td>
+              <td>{{row.animal[0]}}</td>
+              <td>{{row.aisle_number}} - {{row.aisle_name}}</td>
+              <td>
+                <a href="/product/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal"
+                  data-target="#modaledit{{row.id}}">Edit</a>
+              </td>
+            </tr>
+
+            <!-- Modal Edit Aisle -->
+            <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Update Order</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{url_for('update_order', purchase_id=row.id)}}" method="POST">
+                      <input type="hidden" name="_method" value="PUT"/>
+                      <div class="form-group">
+                        <label class="col-4">ID:</label>
+                        <input type="text" name="id" id="id{{row.id}}" class="col-7" value="{{row.id}}" disabled>
+                        <label class="col-4">Name:</label>
+                        <input type="text" name="name" id="name{{row.id}}" class="col-7" value="{{row.name[0]}}" required="true">
+                        <label class="col-4">Price per Cost Unit:</label>
+                        <input type="number" step="any" name="price_per_cost_unit" id="price_per_cost_unit{{row.id}}" class="col-7" value="{{row.price_per_cost_unit[0]}}" required="true">
+                        <label class="col-4">Cost Unit:</label>
+                        <input type="text" name="cost_unit" id="cost_unit{{row.id}}" class="col-7" value="{{row.cost_unit[0]}}" required="true">
+
+                        <label class="col-4">Department:</label>
+                        <select class="col-7" name="department_name" id="department_name{{row.id}}">
+                          <option name="department" id="default">--- Select a department ---</option>
+                          {% for dept in departments %}
+                            <option name="department" id="{{dept.name}}{{row.id}}" {% if dept.id is sameas row.department_id[0] %} selected {% endif %}>{{dept.id}} - {{dept.name}}</option>
+                          {% endfor %}
+                        </select>
+                        
+                        <label class="col-4">Quanity in Stock:</label>
+                        <input type="text" name="quantity_in_stock" id="quantity_in_stock{{row.id}}" class="col-7" value="{{row.quantity_in_stock[0]}}" required="true">
+                        <label class="col-4">Brand:</label>
+                        <input type="text" name="brand" id="brand{{row.id}}" class="col-7" value="{{row.brand[0]}}">
+                        <label class="col-4">Product Date:</label>
+                        <input type="text" name="product_date" id="production_date{{row.id}}" class="col-7" value="{{row.production_date[0]}}" required="true">
+                        <label class="col-4">Expired Date:</label>
+                        <input type="text" name="best_before_date" id="best_before_date{{row.id}}" class="col-7" value="{{row.best_before_date[0]}}">
+                        <label class="col-4">PLU:</label>
+                        <input type="number" name="plu" id="plu{{row.id}}" class="col-7" value="{{row.plu[0]}}">
+                        <label class="col-4">UPC:</label>
+                        <input type="text" name="upc" id="upc{{row.id}}" class="col-7" value="{{row.upc[0]}}">
+                        <label class="col-4">Organic:</label>
+                        <input type="text" name="organic" id="organic{{row.id}}" class="col-7" value="{{row.organic[0]}}">
+                        <label class="col-4">Cut:</label>
+                        <input type="text" name="cut" id="cut{{row.id}}" class="col-7" value="{{row.cut[0]}}">
+                        <label class="col-4">Animal:</label>
+                        <input type="text" name="animal" id="animal{{row.id}}" class="col-7" value="{{row.animal[0]}}">
+
+                        <label class="col-4">Aisle:</label>
+                        <select class="col-7" name="aisle_name" id="aisle_name{{row.id}}">
+                          <option name="aisle" id="default">--- Select an aisle ---</option>
+                          {% for aisle in aisles %}
+                            <option name="aisle" id="{{aisle.name}}{{row.id}}" {% if aisle.aisle_number is sameas row.aisle_number %} selected {% endif %}>{{aisle.aisle_number}} - {{aisle.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-primary" type="button">Update</button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </table>
+      </div>
+
+      <!-- Modal Add Aisle -->
+      <div id="mymodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Order</h4>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <form action="{{url_for('add_order')}}" method="POST">
+                  <div class="form-group">
+                    <label class="col-4">ID:</label>
+                    <input type="text" name="id" class="col-7" disabled>
+                    <label class="col-4">Name:</label>
+                    <input type="text" name="name" class="col-7" required="true">
+                    <label class="col-4">Price per Cost Unit:</label>
+                    <input type="number" step="any" name="price_per_cost_unit" class="col-7" required="true">
+                    <label class="col-4">Cost Unit:</label>
+                    <input type="text" name="cost_unit" class="col-7" required="true">
+
+                    <label class="col-4">Department:</label>
+                    <select class="col-7" name="department_name" required="true">
+                      <option name="department">--- Select a department ---</option>
+                      {% for dept in departments %}
+                        <option name="department">{{dept.id}} - {{dept.name}}</option>
+                      {% endfor %}
+                    </select>
+
+                    <label class="col-4">Quantity in Stock:</label>
+                    <input type="text" name="quantity_in_stock" class="col-7" required="true">
+                    <label class="col-4">Brand:</label>
+                    <input type="text" name="brand" class="col-7">
+                    <label class="col-4">Production Date:</label>
+                    <input type="text" name="production_date" class="col-7" required="true">
+                    <label class="col-4">Expired Date:</label>
+                    <input type="text" name="best_before_date" class="col-7">
+                    <label class="col-4">PLU:</label>
+                    <input type="number" name="plu" class="col-7">
+                    <label class="col-4">UPC:</label>
+                    <input type="text" name="upc" class="col-7">
+                    <label class="col-4">Organic:</label>
+                    <input type="text" name="organic" class="col-7">
+                    <label class="col-4">Cut:</label>
+                    <input type="text" name="cut" class="col-7">
+                    <label class="col-4">Animal:</label>
+                    <input type="text" name="animal" class="col-7">
+
+                    <label class="col-4">Aisle:</label>
+                    <select class="col-7" name="aisle_name" required="true">
+                      <option name="aisle">--- Select an aisle ---</option>
+                      {% for aisle in aisles %}
+                        <option name="aisle">{{aisle.aisle_number}} - {{aisle.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Add Order</button>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
