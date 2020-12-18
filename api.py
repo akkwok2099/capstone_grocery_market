@@ -159,9 +159,10 @@ def _get_token_auth_header():
 
     api_audience = app.config['API_AUDIENCE']
 
-    if request.headers.get('HTTP_HOST', '') in api_audience:
-        access_key = session[conf_access_key]
-        return access_key['access']
+    if request.headers['HOST'] in api_audience:
+        if 'POSTMAN_TOKEN' not in request.headers:
+            access_key = session[conf_access_key]
+            return access_key['access']
     else:
         if 'Authorization' not in request.headers:
             raise AuthError({
@@ -199,6 +200,7 @@ def _get_token_auth_header():
 
 def _check_permissions(permission, payload):
     if 'permissions' not in payload:
+        flash('Invalid claims: Permissions not included in JWT', 'danger')
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permissions not included in JWT'
@@ -206,12 +208,14 @@ def _check_permissions(permission, payload):
 
     if isinstance(permission, list) and len(permission) > 1:
         if not set(permission).intersection(payload['permissions']):
+            flash('Unauthorized: Permissions not found', 'danger')
             raise AuthError({
                 'code': 'unauthorized',
                 'description': 'Permission not found'
             }, 401)
     else:
         if permission not in payload['permissions']:
+            flash('Unauthorized: Permissions not found', 'danger')
             raise AuthError({
                 'code': 'unauthorized',
                 'description': 'Permission not found'
@@ -326,6 +330,7 @@ def requires_login(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if app.config['PROFILE_KEY'] not in session:
+            session.clear()
             return redirect(url_for('login'))
         return f(*args, **kwargs)
 
@@ -348,7 +353,7 @@ def login():
 def logout():
     session.clear()
     params = {'returnTo': url_for(
-        'index', _external=True),
+        'home', _external=True),
         'client_id': app.config['CLIENT_ID']}
     return redirect(f'{auth0.api_base_url}/v2/logout?{urlencode(params)}')
 
@@ -397,17 +402,6 @@ def after_request(response):
 
 
 @app.route('/')
-@requires_login
-def index():
-    # -------------------
-    # Start page
-    # -------------------
-    return render_template(
-        'grocery/home.html',
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
-
-
 @app.route('/home')
 @requires_login
 def home():
@@ -445,9 +439,7 @@ def aisles(self):
     aisles = db.session.query(Aisle).order_by(Aisle.aisle_number).all()
 
     return render_template(
-        'grocery/aisles.html', data=aisles,
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        'grocery/aisles.html', data=aisles)
 
 
 @app.route('/aisles/create', methods=['POST'])
@@ -478,9 +470,7 @@ def add_aisle(self):
     return redirect(url_for(
         'aisles',
         data=db.session.query(Aisle).order_by(
-            Aisle.aisle_number).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+            Aisle.aisle_number).all()))
 
 
 @app.route('/aisles/<string:aisle_number>', methods=['PUT', 'DELETE', 'POST'])
