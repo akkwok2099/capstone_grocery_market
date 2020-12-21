@@ -4,6 +4,13 @@ from wtforms import StringField, QuerySelectField, \
 from wtforms.validators import DataRequired, Email, Phone
 from models import Department, Product, Customer
 
+# TODO This file is not used in this project. Basically, I would
+# like to create this project using Flask-WTF. But since I'm
+# not familiar with it and the project has already taken too
+# long to complete. I was forced to abandon the idea for now
+# and pick it up later on. In the mean time, the front end is done
+# in JavaScript, HTML, and Bootstrap.
+
 
 class EmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])

@@ -51,7 +51,7 @@ swagger_bp = get_swaggerui_blueprint(
 )
 
 # ---------------------------------------------------------------------------
-# Pagination code for displaying database items
+# TODO Pagination code for displaying database items
 # Unused as of now; save for future implementation
 # ---------------------------------------------------------------------------
 #
@@ -163,12 +163,12 @@ def _get_token_auth_header():
         if 'POSTMAN_TOKEN' not in request.headers:
             access_key = session[conf_access_key]
             return access_key['access']
-    else:
-        if 'Authorization' not in request.headers:
-            raise AuthError({
-                "code": "authorization_required",
-                "description": "Authorization is expected in header"
-            }, 401)
+
+    if 'Authorization' not in request.headers:
+        raise AuthError({
+            "code": "authorization_required",
+            "description": "Authorization is expected in header"
+        }, 401)
 
     # "Authorization": "bearer <<token>>"
     auth_header = request.headers['Authorization']
@@ -185,7 +185,7 @@ def _get_token_auth_header():
 
 
 '''
-@DONE implement check_permissions(permission, payload) method
+    Implement check_permissions(permission, payload) method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
         payload: decoded jwt payload
@@ -208,7 +208,7 @@ def _check_permissions(permission, payload):
 
     if isinstance(permission, list) and len(permission) > 1:
         if not set(permission).intersection(payload['permissions']):
-            flash('Unauthorized: Permissions not found', 'danger')
+            # flash('Unauthorized: Permissions not found', 'danger')
             raise AuthError({
                 'code': 'unauthorized',
                 'description': 'Permission not found'
@@ -377,8 +377,8 @@ def callback_handling():
 
     return render_template(
         'grocery/home.html',
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 '''
@@ -410,8 +410,8 @@ def home():
     # -------------------
     return render_template(
         'grocery/home.html',
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/constructions')
@@ -421,8 +421,8 @@ def constructions():
     # -------------------
     return render_template(
         'errors/construction.html',
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 # -------------------------------------------------------
 # Aisles
@@ -439,7 +439,9 @@ def aisles(self):
     aisles = db.session.query(Aisle).order_by(Aisle.aisle_number).all()
 
     return render_template(
-        'grocery/aisles.html', data=aisles)
+        'grocery/aisles.html', data=aisles,
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/aisles/create', methods=['POST'])
@@ -470,7 +472,9 @@ def add_aisle(self):
     return redirect(url_for(
         'aisles',
         data=db.session.query(Aisle).order_by(
-            Aisle.aisle_number).all()))
+            Aisle.aisle_number).all(),
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/aisles/<string:aisle_number>', methods=['PUT', 'DELETE', 'POST'])
@@ -491,14 +495,24 @@ def handle_aisle(self, aisle_number):
                 'danger')
             abort(422)
 
+        aisle_contains = db.session.query(AisleContains).filter_by(
+            aisle_number=int(aisle_number)).all()
+
         try:
+            for data in aisle_contains:
+                db.session.delete(data)
+            db.session.commit()
+
             db.session.delete(aisle)
             db.session.commit()
             flash(f'Aisle {aisle_number} was successfully deleted!', 'success')
         except Exception:
+            import sys
+            type, value, traceback = sys.exc_info()
             db.session.rollback()
             flash(
-                f'An error occurred. Aisle {aisle_number} fail to be deleted!',
+                f'An error occurred. Aisle {aisle_number} was failed \
+                    to be deleted!',
                 'danger')
         finally:
             db.session.close()
@@ -506,8 +520,8 @@ def handle_aisle(self, aisle_number):
         return redirect(url_for(
             'aisles',
             data=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
-            userinfo=session[conf_profile_key],
-            accessinfo=session[conf_access_key]))
+            nickname=session[conf_profile_key]['nickname'] if
+            'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
     elif request.form.get('_method') == 'PUT':
         # -------------------------
@@ -521,7 +535,13 @@ def handle_aisle(self, aisle_number):
             abort(422)
 
         aisle.aisle_number = aisle_number
-        aisle.name = request.form.get('name')
+
+        # TODO Actually I think the correct thing to do is to check whether
+        # the new value is different than the old value first, then
+        # replace if they are different and remain if they are the same.
+        # What I did here is okay except for the fact that when user is
+        # trying to delete an entry... s/he can't
+        aisle.name = request.form.get('name', aisle.name)
 
         try:
             db.session.commit()
@@ -540,8 +560,8 @@ def handle_aisle(self, aisle_number):
         return make_response(redirect(url_for(
             'aisles',
             data=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
-            userinfo=session[conf_profile_key],
-            accessinfo=session[conf_access_key])))
+            nickname=session[conf_profile_key]['nickname'] if
+            'POSTMAN_TOKEN' not in request.headers else 'Guest')))
     else:
         flash(
             'Cannot perform this action. Please contact administrator',
@@ -564,8 +584,8 @@ def customers(self):
 
     return render_template(
         'grocery/customers.html', data=customers,
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/customers/create', methods=['POST'])
@@ -605,8 +625,8 @@ def add_customer(self):
         'customers',
         data=db.session.query(Customer).order_by(
             Customer.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/customers/<string:customer_id>', methods=['PUT', 'POST'])
@@ -632,9 +652,9 @@ def update_customer(self, customer_id):
         abort(422)
 
     customer.id = customer_id
-    customer.name = request.form.get('name')
-    customer.phone = request.form.get('phone')
-    customer.email = request.form.get('email')
+    customer.name = request.form.get('name', customer.name)
+    customer.phone = request.form.get('phone', customer.phone)
+    customer.email = request.form.get('email', customer.email)
 
     try:
         db.session.commit()
@@ -651,8 +671,8 @@ def update_customer(self, customer_id):
     return make_response(redirect(url_for(
         'customers',
         data=db.session.query(Customer).order_by(Customer.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
 
 
 # -------------------------------------------------------
@@ -670,8 +690,8 @@ def departments(self):
 
     return render_template(
         'grocery/departments.html', data=departments,
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/departments/create', methods=['POST'])
@@ -709,8 +729,8 @@ def add_department(self):
         'departments',
         data=db.session.query(Department).order_by(
             Department.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/departments/<string:department_id>', methods=['PUT', 'POST'])
@@ -736,7 +756,7 @@ def update_department(self, department_id):
         abort(422)
 
     department.id = department_id,
-    department.name = request.form.get('name')
+    department.name = request.form.get('name', department.name)
 
     try:
         db.session.commit()
@@ -753,8 +773,8 @@ def update_department(self, department_id):
     return make_response(redirect(url_for(
         'departments',
         data=db.session.query(Department).order_by(Department.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -796,8 +816,8 @@ def employees(self):
         'grocery/employees.html', data=dtos,
         departments=db.session.query(
             Department).order_by(Department.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/employees/create', methods=['POST'])
@@ -809,9 +829,9 @@ def add_employee(self):
     # -------------------------
     name = request.form.get('name', '')
     department = request.form.get('department_name', '')
-    department_id = department.split(' - ', 2)[0]
+    department_id = int(department.split(' - ', 2)[0])
     title = request.form.get('title', '')
-    emp_number = request.form.get('emp_number', '')
+    emp_number = int(request.form.get('emp_number', ''))
     address = request.form.get('address', '')
     phone = request.form.get('phone', '')
     wage = request.form.get('wage', '')
@@ -838,6 +858,8 @@ def add_employee(self):
             f'Employee {name} was successfully added!',
             'success')
     except Exception:
+        import sys
+        type, value, traceback = sys.exc_info()
         db.session.rollback()
         flash(
             f'An error occurred. Employee {name} could not be added!',
@@ -849,8 +871,8 @@ def add_employee(self):
         'employees',
         data=db.session.query(Employee).order_by(
             Employee.department_id, Employee.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/employees/<string:employee_id>', methods=['PUT', 'POST'])
@@ -876,16 +898,16 @@ def update_employee(self, employee_id):
         abort(422)
 
     employee.id = employee_id
-    employee.name = request.form.get('name')
+    employee.name = request.form.get('name', employee.name)
 
     temp = request.form.get('department_name')
     employee.department_id = temp.split(' - ', 2)[0]
 
-    employee.title = request.form.get('title')
-    employee.emp_number = request.form.get('emp_number')
-    employee.address = request.form.get('address')
-    employee.phone = request.form.get('phone')
-    employee.wage = request.form.get('wage')
+    employee.title = request.form.get('title', employee.title)
+    employee.emp_number = request.form.get('emp_number', employee.emp_number)
+    employee.address = request.form.get('address', employee.address)
+    employee.phone = request.form.get('phone', employee.phone)
+    employee.wage = request.form.get('wage', employee.wage)
     employee.is_active = 'is_active' in request.form
 
     try:
@@ -906,8 +928,8 @@ def update_employee(self, employee_id):
         'employees',
         data=db.session.query(Employee).order_by(
             Employee.department_id, Employee.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -959,8 +981,8 @@ def products(self):
         departments=db.session.query(
             Department).order_by(Department.id).all(),
         aisles=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/products/create', methods=['POST'])
@@ -1046,8 +1068,8 @@ def add_product(self):
     return redirect(url_for(
         'products',
         data=db.session.query(Product).order_by(Product.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/products/<int:product_id>', methods=['PUT', 'POST'])
@@ -1073,43 +1095,68 @@ def update_product(self, product_id):
         abort(422)
 
     product.id = product_id
-    product.name = request.form.get('name', '')
+    product.name = request.form.get('name', product.name)
     product.price_per_cost_unit = request.form.get(
-        'price_per_cost_unit', 0)
-    product.cost_unit = request.form.get('cost_unit', '')
-    product.quantity_in_stock = request.form.get('quantity_in_stock', 0)
-    product.brand = request.form.get('brand', None)
+        'price_per_cost_unit', product.price_per_cost_unit)
+    product.cost_unit = request.form.get('cost_unit', product.cost_unit)
+    product.quantity_in_stock = request.form.get(
+        'quantity_in_stock', product.quantity_in_stock)
+    product.brand = request.form.get('brand', product.brand)
 
     product.production_date = request.form.get(
-        'production_date', datetime.today().strftime("%m/%d/%Y"))
+        'production_date', product.production_date)
 
     product.best_before_date = request.form.get(
-        'best_before_date', datetime.today().strftime("%m/%d/%Y"))
+        'best_before_date', product.best_before_date)
 
-    product.plu = request.form.get('plu', None)
-    product.upc = request.form.get('upc', None)
-    form_organic = request.form.get('organic', 0)
+    product.plu = request.form.get('plu', product.plu)
+    product.upc = request.form.get('upc', product.upc)
+    form_organic = request.form.get('organic', 'off')
 
     product.organic = 0
 
     if form_organic == 'on':
         product.organic = 1
 
-    product.cut = request.form.get('cut', None)
-    product.animal = request.form.get('animal', None)
+    product.cut = request.form.get('cut', product.cut)
+    product.animal = request.form.get('animal', product.animal)
 
-    department = request.form.get('department_name', '')
+    department = request.form.get('department_name')
     product.department_id = department.split(' - ', 2)[0]
 
     # Need to update aisle_number in AisleContains table as well
-    aisle = request.form.get('aisle_name', '')
+    aisle = request.form.get('aisle_name')
 
     if aisle is not None:
         aisle_number = aisle.split(' - ', 2)[0]
         aisle_contains = db.session.query(AisleContains).filter(
             AisleContains.product_id == product_id).one_or_none()
 
-        aisle_contains.aisle_number = aisle_number
+        if aisle_contains is not None:
+            aisle_contains.aisle_number = aisle_number
+        else:
+            aisleContains = AisleContains(
+                aisle_number=aisle_number,
+                product_id=product_id
+            )
+
+            # If the product is associated with any aisle, this code
+            # should never have been reached. The other option here
+            # would be to add the association to the AisleContains
+            # table.
+            try:
+                db.session.add(aisleContains)
+            except Exception:
+                import sys
+                type, value, traceback = sys.exc_info()
+                db.session.rollback()
+                flash(
+                    f'An error occurred. Product {product_id} failed to be \
+                        associated with Aisle {aisle_number}.',
+                    'danger')
+                abort(422)
+            finally:
+                db.session.close()
 
     try:
         db.session.commit()
@@ -1117,6 +1164,8 @@ def update_product(self, product_id):
             f'Product {product_id} was successfully updated!',
             'success')
     except Exception:
+        import sys
+        type, value, traceback = sys.exc_info()
         db.session.rollback()
         flash(
             f'An error occurred. Product {product_id} could not be updated!',
@@ -1127,8 +1176,8 @@ def update_product(self, product_id):
     return make_response(redirect(url_for(
         'products',
         data=db.session.query(Product).order_by(Product.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -1146,8 +1195,8 @@ def suppliers(self):
 
     return render_template(
         'grocery/suppliers.html', data=suppliers,
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/suppliers/create', methods=['POST'])
@@ -1187,8 +1236,8 @@ def add_supplier(self):
     return redirect(url_for(
         'suppliers',
         data=db.session.query(Supplier).order_by(Supplier.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/suppliers/<int:supplier_id>', methods=['PUT', 'POST'])
@@ -1214,9 +1263,9 @@ def update_supplier(self, supplier_id):
         abort(422)
 
     supplier.id = supplier_id
-    supplier.name = request.form.get("name", "")
-    supplier.address = request.form.get("address", "")
-    supplier.phone = request.form.get("phone", "")
+    supplier.name = request.form.get("name", supplier.name)
+    supplier.address = request.form.get("address", supplier.address)
+    supplier.phone = request.form.get("phone", supplier.phone)
 
     try:
         db.session.commit()
@@ -1231,8 +1280,8 @@ def update_supplier(self, supplier_id):
     return redirect(url_for(
         'suppliers',
         data=db.session.query(Supplier).order_by(Supplier.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 # ----------------------------------------------------------------
 # Purchases
@@ -1243,7 +1292,7 @@ def update_supplier(self, supplier_id):
 # ----------------------------------------------------------------
 
 
-@app.route('/suppliers', methods=['GET'])
+@app.route('/purchases', methods=['GET'])
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth('get:purchase')
 def purchases(self):
@@ -1254,8 +1303,8 @@ def purchases(self):
 
     return render_template(
         'grocery/purchases.html', data=purchases,
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
 
 
 @app.route('/purchases/create', methods=['POST'])
@@ -1304,8 +1353,8 @@ def add_order(self):
     return redirect(url_for(
         'purchases',
         data=db.session.query(Purchase).order_by(Purchase.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key]))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
 
 
 @app.route('/purchases/<int:purchase_id>', methods=['PUT', 'POST'])
@@ -1324,14 +1373,14 @@ def update_order(purchase_id):
 
     purchase = Purchase.query.filter(
         Purchase.id == purchase_id).one_or_none()
-    product_name = request.form.get('product', '')
-    purchase.quantity = request.form.get('quantity', 0)
-    customer_name = request.form.get('customer_id', '')
+    product_name = request.form.get('product')
+    purchase.quantity = request.form.get('quantity', purchase.quantity)
+    customer_name = request.form.get('customer_id')
 
     purchase.purchase_date = request.form.get(
-        'purchase_date', datetime.today().strftime('%m/%d/%Y'))
+        'purchase_date', purchase.purchase_date)
 
-    purchase.total = request.form.get('total', 0)
+    purchase.total = request.form.get('total', purchase.total)
 
     product = Product.query.filter(
         Product.name == product_name).one_or_none()
@@ -1362,8 +1411,8 @@ def update_order(purchase_id):
     return make_response(redirect(url_for(
         'purchases',
         data=db.session.query(Purchase).order_by(Purchase.id).all(),
-        userinfo=session[conf_profile_key],
-        accessinfo=session[conf_access_key])))
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
 
 
 class AuthError(Exception):
@@ -1381,8 +1430,8 @@ def unprocessable(error):
     return render_template(
         'errors/422.html',
         data=jsonify({
-            'message': error.error.get("description"),
-            'status_code': error.status_code
+            'message': error.description,
+            'status_code': error.code
         })), 422
 
 
@@ -1391,8 +1440,8 @@ def bad_request(error):
     return render_template(
         'errors/400.html',
         data=jsonify({
-            'message': error.error.get("description"),
-            'status_code': error.status_code
+            'message': error.description,
+            'status_code': error.code
         })), 400
 
 
@@ -1401,8 +1450,8 @@ def unauthorized(error):
     return render_template(
         'errors/401.html',
         data=jsonify({
-            'message': error.error.get("description"),
-            'status_code': error.status_code
+            'message': error.description,
+            'status_code': error.code
         })), 401
 
 
@@ -1411,8 +1460,8 @@ def forbidden(error):
     return render_template(
         'errors/403.html',
         data=jsonify({
-            'message': error.error.get("description"),
-            'status_code': error.status_code
+            'message': error.description,
+            'status_code': error.code
         })), 403
 
 
@@ -1431,8 +1480,8 @@ def server_error(error):
     return render_template(
         'errors/500.html',
         data=jsonify({
-            'message': error.error.get("description"),
-            'status_code': error.status_code
+            'message': error.description,
+            'status_code': error.code
         })), 500
 
 

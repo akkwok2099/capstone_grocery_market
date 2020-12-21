@@ -3,7 +3,12 @@
 /*************************/
 
 function getHeaders() {
-    token = document.getElementsByName("access")[0].textContent;
+    var token = "";
+
+    if(document.getElementsByName("access").length > 0) {
+        token = document.getElementsByName("access")[0].textContent;
+    }
+    
     return {
         "Content-type": "application/json;charset=UTF-8",
         "Authorization": "bearer " + token
