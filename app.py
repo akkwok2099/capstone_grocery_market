@@ -371,7 +371,17 @@ def requires_login(f):
 
 setup_db(app)
 
-CORS(app, resources={'/': {'origins': 'http://localhost'}})
+CORS(
+    app,
+    resources={
+        '/': {
+            'origins': [
+                'http://localhost',
+                'https://udacimarket-grocery-system.herokuapp.com/'
+            ]
+        }
+    }
+)
 
 app.secret_key = client_secret
 

@@ -54,14 +54,7 @@ Endpoints information is documented via Swagger UI and can be accessed by append
 
 ## Error Handling
 
-Errors are returned in the following JSON format:
-```json
-      {
-        "success": "False",
-        "error": 404,
-        "message": "Not Found",
-      }
-```
+Errors are returned in their coressponding webpages:
 
 The error codes currently returned are:
 
