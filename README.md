@@ -56,18 +56,19 @@ Endpoints information is documented via Swagger UI and can be accessed by append
 
 Errors are returned in their coressponding webpages:
 
-The error codes currently returned are:
+The error codes currently used are:
 
 * 400 – Bad Request
+* 401 - Unauthorized
+* 403 - Forbidden
 * 404 – Not Found
 * 405 - Method Not Allowed
-* 406 - Not Acceptable
 * 422 – Unprocessable
 * 500 – Something's Not Right
 
 ## Testing
 
-To run the tests, run
+To run the tests, run:
 ```
 dropdb grocery_market_test
 createdb grocery_market_test
