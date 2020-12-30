@@ -36,3 +36,5 @@ class Config(object):
     API_URL = os.environ.get('API_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = \
         os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+
+    TEST_TOKEN = os.environ.get("TEST_TOKEN")

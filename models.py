@@ -1,3 +1,5 @@
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import BigInteger, Boolean, Column, Date, Float, \
     ForeignKey, Integer, String, Table, text
 from sqlalchemy.orm import relationship
@@ -5,6 +7,15 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 metadata = Base.metadata
+
+db = SQLAlchemy()
+migrate = Migrate()
+
+
+def setup_db(app):
+    db.app = app
+    db.init_app(app)
+    migrate.init_app(app, db)
 
 
 class Aisle(Base):
@@ -14,6 +25,9 @@ class Aisle(Base):
     name = Column(String(255), nullable=False)
 
     products = relationship('Product', secondary='aislecontains')
+
+    def __repr__(self):
+        return f'Aisle("{self.aisle_number}","{self.name}")'
 
 
 class Customer(Base):
@@ -25,6 +39,10 @@ class Customer(Base):
     phone = Column(String(255))
     email = Column(String(255))
 
+    def __repr__(self):
+        return f'Customer("{self.id}","{self.name}",\
+            "{self.phone}","{self.email}")'
+
 
 class Department(Base):
     __tablename__ = 'departments'
@@ -32,6 +50,9 @@ class Department(Base):
     id = Column(Integer, primary_key=True, server_default=text(
         "nextval('departments_id_seq'::regclass)"))
     name = Column(String(255))
+
+    def __repr__(self):
+        return f'Department("{self.id}","{self.name}")'
 
 
 t_lowstock = Table(
@@ -51,6 +72,10 @@ class Supplier(Base):
     name = Column(String(255), nullable=False)
     address = Column(String(255))
     phone = Column(String(255), nullable=False)
+
+    def __repr__(self):
+        return f'Supplier("{self.id}","{self.name}",\
+            "{self.address}","{self.phone}")'
 
 
 class Employee(Base):
@@ -81,6 +106,12 @@ class Employee(Base):
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
 
     department = relationship('Department')
+
+    def __repr__(self):
+        return f'Employee("{self.id}","{self.name}",\
+            "{self.department_id}","{self.title}",\
+            "{self.emp_number}","{self.address}",\
+            "{self.phone}","{self.wage}","{self.is_active}")'
 
 
 class Product(Base):
@@ -124,6 +155,15 @@ class Product(Base):
     department = relationship('Department')
     suppliers = relationship('Supplier', secondary='providedby')
 
+    def __repr__(self):
+        return f'Product("{self.id}","{self.name}",\
+            "{self.price_per_cost_unit}","{self.cost_unit}",\
+            "{self.department_id}","{self.quantity_in_stock}",\
+            "{self.brand}","{self.production_date}",\
+            "{self.best_before_date}","{self.plu}",\
+            "{self.upc}","{self.organic}","{self.cut}",\
+            "{self.animal}")'
+
 
 class Providesdelivery(Base):
     __tablename__ = 'providesdelivery'
@@ -134,6 +174,9 @@ class Providesdelivery(Base):
 
     supplier = relationship('Supplier')
     products = relationship('Product', secondary='receivedfrom')
+
+    def __repr__(self):
+        return f'Providesdelivery("{self.delivery_id}","{self.supplier_id}")'
 
 
 t_aislecontains = Table(
@@ -175,6 +218,12 @@ class Purchase(Base):
     customer = relationship('Customer')
     product = relationship('Product')
 
+    def __repr__(self):
+        return f'Purchase("{self.id}","{self.product_id}",\
+            "{self.quantity}","{self.customer_id}",\
+            "{self.purchase_date}","{self.total}",\
+            "{self.is_cancelled}")'
+
 
 t_receivedfrom = Table(
     'receivedfrom', metadata,
@@ -183,3 +232,38 @@ t_receivedfrom = Table(
     Column('delivery_id', ForeignKey(
         'providesdelivery.delivery_id'), primary_key=True, nullable=False)
 )
+
+
+class EmployeeDto(Employee):
+    def __init__(
+        self, department_name, id, name, department_id, title,
+            emp_number, address, phone, wage, is_active):
+        super().__init__(
+            id, name, department_id, title,
+            emp_number, address, phone, wage, is_active)
+        self.department_name = department_name
+
+        def __repr__(self):
+            return f'EmployeeDto("{super.__repr__()}" and\
+                "{self.department_name}")'
+
+
+class ProductDto(Product):
+    def __init__(
+        self, department_name, id, name, price_per_cost_unit,
+            cost_unit, department_id, quantity_in_stock, brand,
+            production_date, best_before_date, plu, upc, organic, cut,
+            animal, aisle_name, aisle_number):
+        super().__init__(
+            id, name, price_per_cost_unit,
+            cost_unit, department_id, quantity_in_stock, brand,
+            production_date, best_before_date, plu, upc, organic, cut,
+            animal)
+        self.department_name = department_name
+        self.aisle_name = aisle_name
+        self.aisle_number = aisle_number
+
+        def __repr__(self):
+            return f'ProductDto("{super.__repr__()}" and\
+                "{self.department_name}","{self.aisle_nnumber}",\
+                "{self.aisle_name}")'

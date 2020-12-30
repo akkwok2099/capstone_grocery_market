@@ -1,136 +1,149 @@
-from flask import session, redirect, flash, abort, \
-    request, url_for, render_template, jsonify, Flask
+from flask import Flask, request, redirect, url_for, session, flash,\
+    render_template, abort, jsonify
 from flask.helpers import make_response
 from datetime import datetime
-# from werkzeug.datastructures import MultiDict
-from models import Aisle, Product, Customer, Purchase, \
-    Department, Employee, Supplier, AisleContains
-from dtos import EmployeeDto, ProductDto
 from sqlalchemy.sql.expression import func
-# from auth import requires_login, requires_auth
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS, cross_origin
-from urllib.parse import urlencode
-from flask_sqlalchemy import SQLAlchemy
-
-from authlib.integrations.flask_client import OAuth
-from flask_migrate import Migrate
-from flask_moment import Moment
-
-from functools import wraps
-from jose import jwt
-from urllib.request import urlopen
-
 import dateutil.parser
 import babel
 import logging
 from logging import FileHandler, Formatter
 from config import Config
+from authlib.integrations.flask_client import OAuth
 
+from functools import wraps
+from jose import jwt
+from urllib.request import urlopen
+from urllib.parse import urlencode
 import json
 
-from flask_swagger_ui import get_swaggerui_blueprint
 
-app = Flask(
-    __name__,
-    static_url_path='/static',
-    template_folder='templates')
+# Local imports...
+from models import Aisle, Product, Customer, Purchase, \
+    Department, Employee, Supplier, AisleContains, db, \
+    EmployeeDto, ProductDto, setup_db
+
+app = Flask(__name__)
+
+###########################################################
+#
+# CONSTANTS
+#
+###########################################################
+
 
 app.config.from_object(Config)
-app.app_context().push()
-
-CORS(app, resources={'/': {'origins': 'http://localhost'}})
-
-app.secret_key = app.config['CLIENT_SECRET']
-
-swagger_bp = get_swaggerui_blueprint(
-    app.config['SWAGGER_URL'],
-    app.config['API_URL'],
-    config={
-        'app_name': "UdaciMarket_Management_System"
-    }
-)
-
-# ---------------------------------------------------------------------------
-# TODO Pagination code for displaying database items
-# Unused as of now; save for future implementation
-# ---------------------------------------------------------------------------
-#
-# def paginate_items(request, selection):
-#     page = request.args.get('page', 1, type=int)
-#     start = (page - 1) * ITEMS_PER_PAGE
-#     end = start + ITEMS_PER_PAGE
-
-#     products = [product.format() for product in selection]
-#     current_products = products[start: end]
-
-#     return current_products
-
-# ----------------------------------------------------------------------------
-# Filters
-# ----------------------------------------------------------------------------
-
-
-def format_datetime(value, format='medium'):
-    date = dateutil.parser.parse(value)
-    if format == 'full':
-        format = "EEEE MMMM, d, y 'at' h:mma"
-    elif format == 'medium':
-        format = "EE MM, dd, y h:mma"
-    elif format == 'slash':
-        format = 'MM/dd/y'
-    return babel.dates.format_datetime(date, format)
-
-
-app.jinja_env.filters['datetime'] = format_datetime
-
-app.register_blueprint(swagger_bp, url_prefix='/swagger')
-
-if not app.debug:
-    file_handler = FileHandler('error.log')
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: \
-            %(message)s [in %(pathname)s:%(lineno)d]')
-    )
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('errors')
-
-
-db = SQLAlchemy()
-migrate = Migrate()
-moment = Moment()
 
 conf_profile_key = app.config['PROFILE_KEY']
 conf_access_key = app.config['ACCESS_KEY']
+client_id = app.config['CLIENT_ID']
+client_secret = app.config['CLIENT_SECRET']
+auth0_domain = app.config['AUTH0_DOMAIN']
+access_token_url = app.config['ACCESS_TOKEN_URL']
+authorize_url = app.config['AUTHORIZE_URL']
+callback_uri = app.config['CALLBACK_URL']
+audience = app.config['API_AUDIENCE']
+jwt_payload = app.config['JWT_PAYLOAD']
+id_key = app.config['ID_KEY']
+algorithms = app.config['ALGORITHMS']
+profile_key = app.config['PROFILE_KEY']
+test_token = app.config['TEST_TOKEN']
 
-db.app = app
-db.init_app(app)
-migrate.init_app(app, db)
-moment.init_app(app)
+###########################################################
+#
+# AUTHORIZATION & AUTHENTICATION
+#
+###########################################################
+
+oauth = OAuth(app)
+
+auth0 = oauth.register(
+    'auth0',
+    client_id=client_id,
+    client_secret=client_secret,
+    api_base_url=f'https://{auth0_domain}',
+    access_token_url=access_token_url,
+    authorize_url=authorize_url,
+    client_kwargs={
+        'scope': 'openid profile email'
+    },
+)
+
 
 '''
-    Implement get_token_auth_header() method
+Authorization and Authentication Routes
+'''
+
+
+@app.route('/login')
+def login():
+    return auth0.authorize_redirect(
+        redirect_uri=callback_uri,
+        audience=audience)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    params = {'returnTo': url_for(
+        'home', _external=True),
+        'client_id': client_id}
+    return redirect(f'{auth0.api_base_url}/v2/logout?{urlencode(params)}')
+
+
+@app.route('/callback')
+def callback_handling():
+    token = auth0.authorize_access_token()
+    resp = auth0.get('userinfo')
+    userinfo = resp.json()
+
+    session[jwt_payload] = userinfo
+    session[conf_profile_key] = {
+        'user_id': userinfo['sub'],
+        'name': userinfo['name'],
+        'picture': userinfo['picture'],
+        'nickname': userinfo['nickname']
+    }
+    session[id_key] = {'id': token['id_token']}
+    session[conf_access_key] = \
+        {'access': token['access_token']}
+
+    return render_template(
+        'grocery/home.html',
+        nickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+
+
+'''
+Use the after_request decorator to set Access-Control-Allow
+'''
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add(
+        'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.add(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+    return response
+
+
+class AuthError(Exception):
+    def __init__(self, error, status_code):
+        self.error = error
+        self.status_code = status_code
+
+
+'''
+    Implement _get_token_auth_header() method
     it should attempt to get the header from the request
         it should raise an AuthError if no header is present
     it should attempt to split bearer and the token
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
-
-oauth = OAuth(app)
-
-auth0 = oauth.register(
-    'auth0',
-    client_id=app.config['CLIENT_ID'],
-    client_secret=app.config['CLIENT_SECRET'],
-    api_base_url=f'https://{app.config["AUTH0_DOMAIN"]}',
-    access_token_url=app.config['ACCESS_TOKEN_URL'],
-    authorize_url=app.config['AUTHORIZE_URL'],
-    client_kwargs={
-        'scope': 'openid profile email'
-    },
-)
 
 
 def _get_token_auth_header():
@@ -157,10 +170,15 @@ def _get_token_auth_header():
     #
     ###############################################################
 
-    api_audience = app.config['API_AUDIENCE']
+    api_audience = audience
 
     if request.headers['HOST'] in api_audience:
+        # Postman test work-around
         if 'POSTMAN_TOKEN' not in request.headers:
+            # Unit test work-around
+            if 'test_permission' in request.headers:
+                return test_token
+
             access_key = session[conf_access_key]
             return access_key['access']
 
@@ -206,6 +224,14 @@ def _check_permissions(permission, payload):
             'description': 'Permissions not included in JWT'
         }, 400)
 
+    # For unit testing purposes
+    # The key-value pair of 'test_permission' is included in the request
+    # headers when the request is identified as an unit test request;
+    # permissions of the routes then can be tested via the manipulations of
+    # the permissions list in the payload
+    if 'test_permission' in request.headers:
+        payload['permissions'] = [request.headers['test_permission']]
+
     if isinstance(permission, list) and len(permission) > 1:
         if not set(permission).intersection(payload['permissions']):
             # flash('Unauthorized: Permissions not found', 'danger')
@@ -243,7 +269,7 @@ def _check_permissions(permission, payload):
 def _verify_decode_jwt(token):
     # Get the public key from Auth0
     jsonurl = urlopen(
-        f'https://{app.config["AUTH0_DOMAIN"]}/.well-known/jwks.json')
+        f'https://{auth0_domain}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
 
     # Get the data in the header
@@ -274,10 +300,10 @@ def _verify_decode_jwt(token):
             payload = jwt.decode(
                 token,
                 rsa_key,
-                algorithms=app.config['ALGORITHMS'],
-                audience=app.config['API_AUDIENCE'],
+                algorithms=algorithms,
+                audience=audience,
                 issuer=(
-                    f'https://{app.config["AUTH0_DOMAIN"]}/')
+                    f'https://{auth0_domain}/')
             )
 
             return payload
@@ -329,76 +355,87 @@ def requires_auth(permission=''):
 def requires_login(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if app.config['PROFILE_KEY'] not in session:
+        if profile_key not in session:
             session.clear()
             return redirect(url_for('login'))
         return f(*args, **kwargs)
 
     return decorated
 
-
-'''
-Authorization and Authentication Routes
-'''
-
-
-@app.route('/login')
-def login():
-    return auth0.authorize_redirect(
-        redirect_uri=app.config['CALLBACK_URL'],
-        audience=app.config['API_AUDIENCE'])
+###########################################################
+#
+# MAIN APP CODE
+#
+###########################################################
 
 
-@app.route('/logout')
-def logout():
-    session.clear()
-    params = {'returnTo': url_for(
-        'home', _external=True),
-        'client_id': app.config['CLIENT_ID']}
-    return redirect(f'{auth0.api_base_url}/v2/logout?{urlencode(params)}')
+setup_db(app)
 
+CORS(app, resources={'/': {'origins': 'http://localhost'}})
 
-@app.route('/callback')
-def callback_handling():
-    token = auth0.authorize_access_token()
-    resp = auth0.get('userinfo')
-    userinfo = resp.json()
+app.secret_key = client_secret
 
-    session[app.config['JWT_PAYLOAD']] = userinfo
-    session[conf_profile_key] = {
-        'user_id': userinfo['sub'],
-        'name': userinfo['name'],
-        'picture': userinfo['picture'],
-        'nickname': userinfo['nickname']
-    }
-    session[app.config['ID_KEY']] = {'id': token['id_token']}
-    session[conf_access_key] = \
-        {'access': token['access_token']}
+# ---------------------------------------------------------------------------
+# TODO Pagination code for displaying database items
+# Unused as of now; save for future implementation
+# ---------------------------------------------------------------------------
+#
+# def paginate_items(request, selection):
+#     page = request.args.get('page', 1, type=int)
+#     start = (page - 1) * ITEMS_PER_PAGE
+#     end = start + ITEMS_PER_PAGE
 
-    return render_template(
-        'grocery/home.html',
-        nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+#     products = [product.format() for product in selection]
+#     current_products = products[start: end]
 
-
-'''
-Use the after_request decorator to set Access-Control-Allow
-'''
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add(
-        'Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.add(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PATCH, PUT, DELETE, OPTIONS')
-    return response
-
+#     return current_products
 
 # ----------------------------------------------------------------------------
-# Routes
+# Filters
 # ----------------------------------------------------------------------------
+
+
+def format_datetime(value, format='medium'):
+    date = dateutil.parser.parse(value)
+    if format == 'full':
+        format = "EEEE MMMM, d, y 'at' h:mma"
+    elif format == 'medium':
+        format = "EE MM, dd, y h:mma"
+    elif format == 'slash':
+        format = 'MM/dd/y'
+    return babel.dates.format_datetime(date, format)
+
+
+app.jinja_env.filters['datetime'] = format_datetime
+
+with app.app_context():
+    swagger_bp = get_swaggerui_blueprint(
+        app.config['SWAGGER_URL'],
+        app.config['API_URL'],
+        config={
+            'app_name': "UdaciMarket_Management_System"
+        }
+    )
+
+    app.register_blueprint(swagger_bp, url_prefix='/swagger')
+
+
+if not app.debug:
+    file_handler = FileHandler('error.log')
+    file_handler.setFormatter(
+        Formatter('%(asctime)s %(levelname)s: \
+            %(message)s [in %(pathname)s:%(lineno)d]')
+    )
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.info('errors')
+
+###########################################################
+#
+# ROUTES
+#
+###########################################################
 
 
 @app.route('/')
@@ -441,7 +478,8 @@ def aisles(self):
     return render_template(
         'grocery/aisles.html', data=aisles,
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/aisles/create', methods=['POST'])
@@ -474,10 +512,12 @@ def add_aisle(self):
         data=db.session.query(Aisle).order_by(
             Aisle.aisle_number).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
-@app.route('/aisles/<string:aisle_number>', methods=['PUT', 'DELETE', 'POST'])
+@app.route(
+    '/aisles/<string:aisle_number>', methods=['PUT', 'DELETE', 'POST'])
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth(['delete:aisle', 'put:aisle'])
 def handle_aisle(self, aisle_number):
@@ -521,7 +561,8 @@ def handle_aisle(self, aisle_number):
             'aisles',
             data=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
             nickname=session[conf_profile_key]['nickname'] if
-            'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+            'POSTMAN_TOKEN' not in request.headers and
+            'test_permission' not in request.headers else 'Guest'))
 
     elif request.form.get('_method') == 'PUT':
         # -------------------------
@@ -561,7 +602,8 @@ def handle_aisle(self, aisle_number):
             'aisles',
             data=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
             nickname=session[conf_profile_key]['nickname'] if
-            'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+            'POSTMAN_TOKEN' not in request.headers and
+            'test_permission' not in request.headers else 'Guest')))
     else:
         flash(
             'Cannot perform this action. Please contact administrator',
@@ -585,7 +627,8 @@ def customers(self):
     return render_template(
         'grocery/customers.html', data=customers,
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/customers/create', methods=['POST'])
@@ -626,7 +669,8 @@ def add_customer(self):
         data=db.session.query(Customer).order_by(
             Customer.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/customers/<string:customer_id>', methods=['PUT', 'POST'])
@@ -672,7 +716,8 @@ def update_customer(self, customer_id):
         'customers',
         data=db.session.query(Customer).order_by(Customer.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')))
 
 
 # -------------------------------------------------------
@@ -691,7 +736,8 @@ def departments(self):
     return render_template(
         'grocery/departments.html', data=departments,
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/departments/create', methods=['POST'])
@@ -730,7 +776,8 @@ def add_department(self):
         data=db.session.query(Department).order_by(
             Department.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/departments/<string:department_id>', methods=['PUT', 'POST'])
@@ -774,7 +821,8 @@ def update_department(self, department_id):
         'departments',
         data=db.session.query(Department).order_by(Department.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -817,7 +865,8 @@ def employees(self):
         departments=db.session.query(
             Department).order_by(Department.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/employees/create', methods=['POST'])
@@ -872,7 +921,8 @@ def add_employee(self):
         data=db.session.query(Employee).order_by(
             Employee.department_id, Employee.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/employees/<string:employee_id>', methods=['PUT', 'POST'])
@@ -928,8 +978,9 @@ def update_employee(self, employee_id):
         'employees',
         data=db.session.query(Employee).order_by(
             Employee.department_id, Employee.id).all(),
-        nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+        nnickname=session[conf_profile_key]['nickname'] if
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -982,7 +1033,8 @@ def products(self):
             Department).order_by(Department.id).all(),
         aisles=db.session.query(Aisle).order_by(Aisle.aisle_number).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/products/create', methods=['POST'])
@@ -1069,7 +1121,8 @@ def add_product(self):
         'products',
         data=db.session.query(Product).order_by(Product.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/products/<int:product_id>', methods=['PUT', 'POST'])
@@ -1128,7 +1181,7 @@ def update_product(self, product_id):
     aisle = request.form.get('aisle_name')
 
     if aisle is not None:
-        aisle_number = aisle.split(' - ', 2)[0]
+        aisle_number = int(aisle.split(' - ', 2)[0])
         aisle_contains = db.session.query(AisleContains).filter(
             AisleContains.product_id == product_id).one_or_none()
 
@@ -1177,7 +1230,8 @@ def update_product(self, product_id):
         'products',
         data=db.session.query(Product).order_by(Product.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')))
 
 
 # ----------------------------------------------------------------
@@ -1196,7 +1250,8 @@ def suppliers(self):
     return render_template(
         'grocery/suppliers.html', data=suppliers,
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/suppliers/create', methods=['POST'])
@@ -1237,7 +1292,8 @@ def add_supplier(self):
         'suppliers',
         data=db.session.query(Supplier).order_by(Supplier.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/suppliers/<int:supplier_id>', methods=['PUT', 'POST'])
@@ -1281,7 +1337,8 @@ def update_supplier(self, supplier_id):
         'suppliers',
         data=db.session.query(Supplier).order_by(Supplier.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 # ----------------------------------------------------------------
 # Purchases
@@ -1304,7 +1361,8 @@ def purchases(self):
     return render_template(
         'grocery/purchases.html', data=purchases,
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')
 
 
 @app.route('/purchases/create', methods=['POST'])
@@ -1354,7 +1412,8 @@ def add_order(self):
         'purchases',
         data=db.session.query(Purchase).order_by(Purchase.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest'))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest'))
 
 
 @app.route('/purchases/<int:purchase_id>', methods=['PUT', 'POST'])
@@ -1412,17 +1471,14 @@ def update_order(purchase_id):
         'purchases',
         data=db.session.query(Purchase).order_by(Purchase.id).all(),
         nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')))
+        'POSTMAN_TOKEN' not in request.headers and
+        'test_permission' not in request.headers else 'Guest')))
 
-
-class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
-
-# -------------------------------------------------------
-# Handling Exceptions
-# -------------------------------------------------------
+###########################################################
+#
+# EXCEPTION HANDLERS
+#
+###########################################################
 
 
 @app.errorhandler(422)

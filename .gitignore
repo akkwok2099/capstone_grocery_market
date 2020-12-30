@@ -1,5 +1,4 @@
 .venv/
-app/
 
 *.pyc
 __pycache__/
@@ -14,5 +13,6 @@ htmlcov/
 build/
 *.egg-info/
 
-
+.env
 error.log
+grocery.sql.design

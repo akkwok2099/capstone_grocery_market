@@ -1,3 +1,3 @@
-FLASK_APP=api
+FLASK_APP=start
 FLASK_ENV=development
 FLASK_DEBUG=1
