@@ -6,21 +6,21 @@
 
 #### Python 3.7
 
-Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+Follow instructions to install Python 3.7 for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
 #### Virtual Enviornment
 
-We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+Running the app in an virtual environment is highly recommended. This keeps the dependencies for the project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 #### PIP Dependencies
 
-Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
+Once you have your virtual environment setup and running, install dependencies by naviging to the main directory (which is right under CAPSTONE_GROCERY_MARKET) and running:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This will install all of the required packages we selected within the `requirements.txt` file.
+This will install all of the required packages within the `requirements.txt` file.
 
 ##### Key Dependencies
 
@@ -29,6 +29,8 @@ This will install all of the required packages we selected within the `requireme
 - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we"ll use handle the lightweight sqlite database. You"ll primarily work in app.py and can reference models.py. 
 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we"ll use to handle cross origin requests from our frontend server. 
+  
+- [Flask-Swagger-UI](https://github.com/swagger-api/swagger-ui) is a collection of HTML, JavaScript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API.
 
 ## Database Setup
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
@@ -36,26 +38,18 @@ With Postgres running, restore a database using the trivia.psql file provided. F
 psql grocery_market < grocery.psql
 ```
 
-## Running the server
+## Running the application
 
-From within the `backend` directory first ensure you are working using your created virtual environment.
-
-To run the server, execute:
+First ensure you are working using your created virtual environment; then to run the application, execute:
 
 ```bash
-export FLASK_APP=app
-export FLASK_ENV=development
-flask run
+python app.py
 ```
-
-Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
-
-Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application.
 
 
 ## Endpoints
 
-Endpoints information is documented via Swagger UI and can be accessed by {{host:port}}/swagger.
+Endpoints information is documented via Swagger UI and can be accessed by appending `/swagger` to the host address.
 
 
 ## Error Handling
