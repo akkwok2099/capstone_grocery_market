@@ -1131,3 +1131,5 @@ ValueError: invalid literal for int() with base 10: ''
 2020-12-29 20:40:58,943 INFO:             errors [in c:\Users\alank\Documents\Udacity\Nanodegrees\Full_Stack_Web_Developer\capstone_grocery_market\app.py:432]
 2020-12-29 20:41:01,981 INFO:             errors [in c:\Users\alank\Documents\Udacity\Nanodegrees\Full_Stack_Web_Developer\capstone_grocery_market\app.py:432]
 2020-12-29 20:41:21,580 INFO:             errors [in c:\Users\alank\Documents\Udacity\Nanodegrees\Full_Stack_Web_Developer\capstone_grocery_market\app.py:432]
+2020-12-29 21:22:10,244 INFO:             errors [in C:\Users\alank\Documents\Udacity\Nanodegrees\Full_Stack_Web_Developer\capstone_grocery_market\app.py:432]
+2020-12-29 21:22:57,538 INFO:             errors [in C:\Users\alank\Documents\Udacity\Nanodegrees\Full_Stack_Web_Developer\capstone_grocery_market\app.py:432]
