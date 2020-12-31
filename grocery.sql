@@ -66,11 +66,6 @@ CREATE TABLE Products(
     FOREIGN KEY(department_id) REFERENCES Departments(id)
 );
 
-CREATE VIEW LowStock AS
-SELECT id, name, department_id, quantity_in_stock
-FROM Products
-WHERE quantity_in_stock < 7;
-
 CREATE TABLE Aisles(
     aisle_number INT,
     name VARCHAR(255) NOT NULL,

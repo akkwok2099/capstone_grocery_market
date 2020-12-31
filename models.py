@@ -55,15 +55,6 @@ class Department(Base):
         return f'Department("{self.id}","{self.name}")'
 
 
-t_lowstock = Table(
-    'lowstock', metadata,
-    Column('id', Integer),
-    Column('name', String(255)),
-    Column('department_id', BigInteger),
-    Column('quantity_in_stock', Integer)
-)
-
-
 class Supplier(Base):
     __tablename__ = 'suppliers'
 

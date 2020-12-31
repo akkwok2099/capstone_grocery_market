@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "localhost:8181",
+  "host": "udacimarket-grocery-system.herokuapp.com",
   "tags": [
     {
       "name": "aisle",
@@ -65,13 +65,14 @@
     }
   ],
   "schemes": [
+    "https",
     "http"
   ],
   "paths": {
     "/aisles": {
       "get": {
         "tags": [
-          "aisles"
+          "aisle"
         ],
         "summary": "List aisles",
         "description": "List all available aisles in the market",
@@ -111,6 +112,9 @@
             "market_auth": [
               "get:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -118,7 +122,7 @@
     "/aisles/{aisle_number}": {
       "put": {
         "tags": [
-          "aisles"
+          "aisle"
         ],
         "summary": "Modify information of an aisle",
         "description": "Update information on a single aisle",
@@ -138,7 +142,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "aisle",
             "description": "response.form.get",
             "required": true,
@@ -176,12 +180,15 @@
             "market_auth": [
               "put:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       },
       "delete": {
         "tags": [
-          "aisles"
+          "aisle"
         ],
         "summary": "Delete an aisle",
         "description": "Delete a single aisle",
@@ -226,6 +233,9 @@
             "market_auth": [
               "delete:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -233,7 +243,7 @@
     "/aisles/create": {
       "post": {
         "tags": [
-          "aisles"
+          "aisle"
         ],
         "summary": "Add an aisle",
         "description": "Aisle number is required as it serves also as the primary key",
@@ -247,7 +257,7 @@
         "parameters": [
           {
             "name": "aisle",
-            "in": "formData",
+            "in": "body",
             "description": "response.form.get",
             "required": true,
             "schema": {
@@ -286,6 +296,9 @@
             "market_auth": [
               "post:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -293,7 +306,7 @@
     "/customers": {
       "get": {
         "tags": [
-          "customers"
+          "customer"
         ],
         "summary": "List all customers",
         "description": "List all registered customers",
@@ -333,6 +346,9 @@
             "market_auth": [
               "get:customer"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -340,7 +356,7 @@
     "/customers/{customer_id}": {
       "put": {
         "tags": [
-          "customers"
+          "customer"
         ],
         "summary": "Modify information of a customer",
         "description": "Update information on a customer",
@@ -360,7 +376,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "aisle",
             "description": "response.form.get",
             "required": true,
@@ -398,6 +414,9 @@
             "market_auth": [
               "put:customer"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -405,7 +424,7 @@
     "/customers/create": {
       "post": {
         "tags": [
-          "customers"
+          "customer"
         ],
         "summary": "Add a customer",
         "description": "Adding customer",
@@ -419,7 +438,7 @@
         "parameters": [
           {
             "name": "customer",
-            "in": "formData",
+            "in": "body",
             "description": "response.form,get",
             "required": true,
             "schema": {
@@ -458,6 +477,9 @@
             "market_auth": [
               "post:customer"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -465,7 +487,7 @@
     "/departments": {
       "get": {
         "tags": [
-          "departments"
+          "department"
         ],
         "summary": "List departments",
         "description": "List all departments in the market",
@@ -505,6 +527,9 @@
             "market_auth": [
               "get:department"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -512,7 +537,7 @@
     "/departments/{department_id}": {
       "put": {
         "tags": [
-          "departments"
+          "department"
         ],
         "summary": "Modify information of a department",
         "description": "Update information on a department",
@@ -532,7 +557,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "department",
             "description": "request.form.get",
             "required": true,
@@ -570,6 +595,9 @@
             "market_auth": [
               "put:department"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -577,7 +605,7 @@
     "/departments/create": {
       "post": {
         "tags": [
-          "departments"
+          "department"
         ],
         "summary": "Add a department",
         "description": "Add a department",
@@ -591,7 +619,7 @@
         "parameters": [
           {
             "name": "department",
-            "in": "formData",
+            "in": "body",
             "description": "request.form.get",
             "required": true,
             "schema": {
@@ -630,6 +658,9 @@
             "market_auth": [
               "post:department"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -637,7 +668,7 @@
     "/employees": {
       "get": {
         "tags": [
-          "employees"
+          "employee"
         ],
         "summary": "List employees",
         "description": "List all available employees in the market (past and present)",
@@ -677,6 +708,9 @@
             "market_auth": [
               "get:employee"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -684,7 +718,7 @@
     "/employees/{employee_id}": {
       "put": {
         "tags": [
-          "employees"
+          "employee"
         ],
         "summary": "Modify information of an employee",
         "description": "Update information on a single employee",
@@ -704,7 +738,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "employee_dto",
             "description": "request.form.get",
             "required": true,
@@ -742,6 +776,9 @@
             "market_auth": [
               "put:employee"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -749,7 +786,7 @@
     "/employees/create": {
       "post": {
         "tags": [
-          "employees"
+          "employee"
         ],
         "summary": "Add an employee",
         "description": "Add an employee (including his/her department)",
@@ -763,7 +800,7 @@
         "parameters": [
           {
             "name": "employee_dto",
-            "in": "formData",
+            "in": "body",
             "description": "request.form.get",
             "required": true,
             "schema": {
@@ -802,6 +839,9 @@
             "market_auth": [
               "post:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -809,7 +849,7 @@
     "/products": {
       "get": {
         "tags": [
-          "products"
+          "product"
         ],
         "summary": "List all products in the market",
         "description": "List all available aisles in the market (past and present)",
@@ -849,6 +889,9 @@
             "market_auth": [
               "get:product"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -856,7 +899,7 @@
     "/products/{product_id}": {
       "put": {
         "tags": [
-          "products"
+          "product"
         ],
         "summary": "Modify product information",
         "description": "Update information on a product",
@@ -876,7 +919,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "product",
             "description": "request.form.get",
             "required": true,
@@ -914,6 +957,9 @@
             "market_auth": [
               "put:product"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -921,7 +967,7 @@
     "/products/create": {
       "post": {
         "tags": [
-          "products"
+          "product"
         ],
         "summary": "Add a product",
         "description": "Add a product include departemnt and aisle information",
@@ -935,7 +981,7 @@
         "parameters": [
           {
             "name": "product",
-            "in": "formData",
+            "in": "body",
             "description": "request.form.get",
             "required": true,
             "schema": {
@@ -974,6 +1020,9 @@
             "market_auth": [
               "post:aisle"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -981,7 +1030,7 @@
     "/suppliers": {
       "get": {
         "tags": [
-          "suppliers"
+          "supplier"
         ],
         "summary": "List suppliers",
         "description": "List all suppliers (past and present)",
@@ -1021,6 +1070,9 @@
             "market_auth": [
               "get:supplier"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -1028,7 +1080,7 @@
     "/suppliers/{supplier_id}": {
       "put": {
         "tags": [
-          "suppliers"
+          "supplier"
         ],
         "summary": "Modify information on a supplier",
         "description": "Update information on a supplier",
@@ -1048,7 +1100,7 @@
             "type": "string"
           },
           {
-            "in": "formData",
+            "in": "body",
             "name": "supplier",
             "description": "request.form.get",
             "required": true,
@@ -1086,6 +1138,9 @@
             "market_auth": [
               "put:supplier"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
@@ -1093,7 +1148,7 @@
     "/suppliers/create": {
       "post": {
         "tags": [
-          "suppliers"
+          "supplier"
         ],
         "summary": "Add a supplier",
         "description": "Add a supplier",
@@ -1107,7 +1162,7 @@
         "parameters": [
           {
             "name": "supplier",
-            "in": "formData",
+            "in": "body",
             "description": "request.form.get",
             "required": true,
             "schema": {
@@ -1146,12 +1201,20 @@
             "market_auth": [
               "post:supplier"
             ]
+          },
+          {
+            "api_key":[]
           }
         ]
       }
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "market_auth": {
       "type": "oauth2",
       "authorizationUrl": "https://skittishloki.auth0.com/authorize",
