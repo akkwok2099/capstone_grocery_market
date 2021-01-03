@@ -339,6 +339,8 @@ def requires_auth(permission=''):
             try:
                 payload = _verify_decode_jwt(token)
             except BaseException:
+                import sys
+                type, value, traceback = sys.exc_info()
                 raise AuthError({
                     "code": "jwt_decode_error",
                     "description": "Error decoding JWT"
