@@ -1,14 +1,22 @@
--- drop existing database and recreate it
---DROP DATABASE IF EXISTS grocery_market;
---CREATE DATABASE grocery_market;
-
 -- drop schema which contains all tables and views and recreate the schema
-DROP SCHEMA IF EXISTS public CASCADE;
-CREATE SCHEMA public;
+    DROP TABLE IF EXISTS aislecontains;
+    DROP TABLE IF EXISTS aisles;
+    DROP TABLE IF EXISTS purchases;
+    DROP TABLE IF EXISTS providedby;
+    DROP TABLE IF EXISTS receivedfrom;
+    DROP TABLE IF EXISTS employees;
+    DROP TABLE IF EXISTS products;
+    DROP TABLE IF EXISTS departments;
+    DROP TABLE IF EXISTS providesdelivery;
+    DROP TABLE IF EXISTS customers;
+    DROP TABLE IF EXISTS suppliers;
 
--- restore default grants
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO public;
+-- create table for flask-migrate
+-- CREATE TABLE IF NOT EXISTS alembic_version (
+--     version_num VARCHAR(32) NOT NULL,
+--     CONSTRAINT alembic_version_pkc 
+--     PRIMARY KEY (version_num)
+-- );
 
 -- create tables and views
 CREATE TABLE Customers(

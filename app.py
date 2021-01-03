@@ -16,6 +16,7 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 from urllib.parse import urlencode
+import sys
 import json
 
 
@@ -31,7 +32,6 @@ app = Flask(__name__)
 # CONSTANTS
 #
 ###########################################################
-
 
 app.config.from_object(Config)
 
@@ -49,6 +49,22 @@ id_key = app.config['ID_KEY']
 algorithms = app.config['ALGORITHMS']
 profile_key = app.config['PROFILE_KEY']
 test_token = app.config['TEST_TOKEN']
+
+###########################################################
+#
+# LOGGING
+#
+###########################################################
+
+if not app.debug:
+    formatter = Formatter('%(asctime)s %(levelname)s: \
+            %(message)s [in %(pathname)s:%(lineno)d]')
+    file_handler = FileHandler('error.log')
+    file_handler.setFormatter(formatter)
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.info('LOGGING LEVEL: INFO')
 
 ###########################################################
 #
@@ -183,6 +199,7 @@ def _get_token_auth_header():
             return access_key['access']
 
     if 'Authorization' not in request.headers:
+        app.logger.info('Authorization is expected in header')
         raise AuthError({
             "code": "authorization_required",
             "description": "Authorization is expected in header"
@@ -194,6 +211,7 @@ def _get_token_auth_header():
     header_parts = auth_header.split(' ')
 
     if len(header_parts) != 2 or header_parts[0].lower() != 'bearer':
+        app.logger.info('Mendatory authorization requires \'bearer\' token')
         raise AuthError({
             "code": "invalid_token",
             "description": "Mendatory authorization requires 'bearer' token"
@@ -219,6 +237,7 @@ def _get_token_auth_header():
 def _check_permissions(permission, payload):
     if 'permissions' not in payload:
         flash('Invalid claims: Permissions not included in JWT', 'danger')
+        app.logger.info('Permissions not included in JWT')
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permissions not included in JWT'
@@ -242,6 +261,7 @@ def _check_permissions(permission, payload):
     else:
         if permission not in payload['permissions']:
             flash('Unauthorized: Permissions not found', 'danger')
+            app.logger.info('Permissions not found')
             raise AuthError({
                 'code': 'unauthorized',
                 'description': 'Permission not found'
@@ -278,6 +298,7 @@ def _verify_decode_jwt(token):
     # Choose the key
     rsa_key = {}
     if 'kid' not in unverified_header:
+        app.logger.info('Authorization malformed')
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization malformed'
@@ -309,22 +330,28 @@ def _verify_decode_jwt(token):
             return payload
 
         except jwt.ExpiredSignatureError:
+            app.logger.info('Token expired')
             raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired'
             }, 401)
 
         except jwt.JWTClaimsError:
+            app.logger.info('Incorrect claims. Issues with '
+                            'audience and issuer')
             raise AuthError({
                 'code': 'invalid_claims',
                 'description': ('Incorrect claims. Please check the '
                                 'audience and issuer')
             }, 401)
         except Exception:
+            app.logger.info('Unable to parse authentication token '
+                            'in header')
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token'
             }, 400)
+    app.logger.info('Unable to find the appropriate key in header')
     raise AuthError({
         'code': 'invalid_header',
         'description': 'Unable to find the appropriate key'
@@ -338,9 +365,9 @@ def requires_auth(permission=''):
             token = _get_token_auth_header()
             try:
                 payload = _verify_decode_jwt(token)
-            except BaseException:
-                import sys
-                type, value, traceback = sys.exc_info()
+            except BaseException as e:
+                tb = sys.exc_info()
+                app.logger.info(e.with_traceback(tb[2]))
                 raise AuthError({
                     "code": "jwt_decode_error",
                     "description": "Error decoding JWT"
@@ -422,17 +449,6 @@ with app.app_context():
     app.register_blueprint(swagger_bp, url_prefix='/swagger')
 
 
-if not app.debug:
-    file_handler = FileHandler('error.log')
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: \
-            %(message)s [in %(pathname)s:%(lineno)d]')
-    )
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('errors')
-
 ###########################################################
 #
 # ROUTES
@@ -501,7 +517,9 @@ def add_aisle(self):
         db.session.commit()
         flash(
             f'Aisle {aisle_number} was successfully added!', 'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Aisle {aisle_number} could not be added!',
@@ -548,9 +566,9 @@ def handle_aisle(self, aisle_number):
             db.session.delete(aisle)
             db.session.commit()
             flash(f'Aisle {aisle_number} was successfully deleted!', 'success')
-        except Exception:
-            import sys
-            type, value, traceback = sys.exc_info()
+        except Exception as e:
+            tb = sys.exc_info()
+            app.logger.info(e.with_traceback(tb[2]))
             db.session.rollback()
             flash(
                 f'An error occurred. Aisle {aisle_number} was failed \
@@ -591,7 +609,9 @@ def handle_aisle(self, aisle_number):
             flash(
                 f'Aisle {aisle_number} was successfully updated!',
                 'success')
-        except Exception:
+        except Exception as e:
+            tb = sys.exc_info()
+            app.logger.info(e.with_traceback(tb[2]))
             db.session.rollback()
             flash(
                 f'An error occurred. Aisle {aisle_number} \
@@ -658,7 +678,9 @@ def add_customer(self):
         db.session.add(customer)
         db.session.commit()
         flash(f'Customer {name} was successfully added!', 'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Customer {name} could not be added!',
@@ -707,7 +729,9 @@ def update_customer(self, customer_id):
         flash(
             f'Customer {customer_id} was successfully updated!',
             'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(f'An error occurred. Customer {customer_id} \
             could not be updated!', 'danger')
@@ -765,7 +789,9 @@ def add_department(self):
         flash(
             f'Department {name} was successfully added!',
             'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Department {name} could not be added!',
@@ -812,7 +838,9 @@ def update_department(self, department_id):
         flash(
             f'Department {department_id} was successfully updated!',
             'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(f'An error occurred. Department {department_id} \
             could not be updated!', 'danger')
@@ -908,9 +936,9 @@ def add_employee(self):
         flash(
             f'Employee {name} was successfully added!',
             'success')
-    except Exception:
-        import sys
-        type, value, traceback = sys.exc_info()
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Employee {name} could not be added!',
@@ -967,9 +995,9 @@ def update_employee(self, employee_id):
         flash(
             f'Employee {employee_id} was successfully updated!',
             'success')
-    except Exception:
-        import sys
-        type, value, traceback = sys.exc_info()
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(f'An error occurred. Employee {employee_id} \
             could not be updated!', 'danger')
@@ -1109,9 +1137,9 @@ def add_product(self):
             db.session.commit()
 
         flash(f'Product {name} was successfully added!', 'success')
-    except Exception:
-        import sys
-        type, value, traceback = sys.exc_info()
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Product {name} could not be added!',
@@ -1201,9 +1229,9 @@ def update_product(self, product_id):
             # table.
             try:
                 db.session.add(aisleContains)
-            except Exception:
-                import sys
-                type, value, traceback = sys.exc_info()
+            except Exception as e:
+                tb = sys.exc_info()
+                app.logger.info(e.with_traceback(tb[2]))
                 db.session.rollback()
                 flash(
                     f'An error occurred. Product {product_id} failed to be \
@@ -1218,9 +1246,9 @@ def update_product(self, product_id):
         flash(
             f'Product {product_id} was successfully updated!',
             'success')
-    except Exception:
-        import sys
-        type, value, traceback = sys.exc_info()
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Product {product_id} could not be updated!',
@@ -1282,7 +1310,9 @@ def add_supplier(self):
         db.session.commit()
         flash(
             f'Supplier {name} was successfully added!', 'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Supplier {name} could not be added!',
@@ -1328,7 +1358,9 @@ def update_supplier(self, supplier_id):
     try:
         db.session.commit()
         flash(f'Supplier {supplier_id} was successfully updated!', 'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(f'An error occurred. Supplier {supplier_id} \
             could not be updated!', 'danger')
@@ -1402,7 +1434,9 @@ def add_order(self):
         flash(
             f'Order {product.id} was successfully added!',
             'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(
             f'An error occurred. Order {product.id} could not be added!',
@@ -1462,7 +1496,9 @@ def update_order(purchase_id):
         flash(
             f'Order {purchase_id} was successfully updated!',
             'success')
-    except Exception:
+    except Exception as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
         db.session.rollback()
         flash(f'An error occurred. Order {purchase_id} \
             could not be updated!', 'danger')
@@ -1485,6 +1521,7 @@ def update_order(purchase_id):
 
 @app.errorhandler(422)
 def unprocessable(error):
+    app.logger.info('ErrorHandler 422 called')
     return render_template(
         'errors/422.html',
         data=jsonify({
@@ -1495,6 +1532,7 @@ def unprocessable(error):
 
 @app.errorhandler(400)
 def bad_request(error):
+    app.logger.info('ErrorHandler 400 called')
     return render_template(
         'errors/400.html',
         data=jsonify({
@@ -1505,6 +1543,7 @@ def bad_request(error):
 
 @app.errorhandler(401)
 def unauthorized(error):
+    app.logger.info('ErrorHandler 401 called')
     return render_template(
         'errors/401.html',
         data=jsonify({
@@ -1515,6 +1554,7 @@ def unauthorized(error):
 
 @app.errorhandler(403)
 def forbidden(error):
+    app.logger.info('ErrorHandler 403 called')
     return render_template(
         'errors/403.html',
         data=jsonify({
@@ -1525,6 +1565,7 @@ def forbidden(error):
 
 @app.errorhandler(405)
 def method_not_allowed(error):
+    app.logger.info('ErrorHandler 405 called')
     return render_template(
         'errors/405.html',
         data=jsonify({
@@ -1535,6 +1576,7 @@ def method_not_allowed(error):
 
 @app.errorhandler(500)
 def server_error(error):
+    app.logger.info('ErrorHandler 500 called')
     return render_template(
         'errors/500.html',
         data=jsonify({
@@ -1545,11 +1587,18 @@ def server_error(error):
 
 @app.errorhandler(404)
 def resource_not_found(error):
-    return render_template('errors/404.html'), 404
+    app.logger.info('ErrorHandler 404 called')
+    return render_template(
+        'errors/404.html',
+        data=jsonify({
+            'message': error.description,
+            'status_code': error.code
+        })), 404
 
 
 @app.errorhandler(AuthError)
 def auth_error(error):
+    app.logger.info('ErrorHandler AuthError called')
     return render_template('errors/errors.html')
 
 
