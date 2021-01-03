@@ -124,3 +124,20 @@ python test_api.py
 ### Postman Routing Tests
 
 Both the Postman routing tests and their results can be found in two json files located in the root directory of the project; they are `udacity-fsnd-udacimarket.postman_collection.json` and `udacity-fsnd-udacimarket.postman_test_run.json`, respectively.
+
+### For Application Testers
+
+Auth0 login information:
+```
+(Role: MarketManager - Full permissions)
+username: apptest2099@gmail.com
+password: ..011iAmlegend235,,
+
+(Role: MarketEmployee - Partial permissions)
+username: apptest1024@yandex.com
+password: ..011iAmlegend235,,
+
+(Role: MarketCustomer - No permission)
+username: apptest0512@yahoo.com
+password: ..011iAmlegend235,,
+```
