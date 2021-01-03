@@ -1,6 +1,7 @@
 # Udacity Full Stack Web Developer Nanodegree Capstone Project 
 
 ## UdaciMarket Management System
+### Temporary Location at https://udacimarket-grocery-system.herokuapp.com/
 #
 ### Installing Dependencies
 
@@ -45,14 +46,50 @@ With Postgres running, restore a database using the grocery.sql file provided. F
 psql grocery_market < grocery.psql
 ```
 
+
+## Configuration File Setup
+A `.env` file for defining the following configuation parameters is required to be able to successfully build the project, and the file needs to be resided in the root of the project.
+
+```
+AUTH0_DOMAIN=skittishloki.auth0.com
+ALGORITHMS=['RS256']
+CLIENT_ID=Cu7QnsZ3tBNp8HMjfcMntZ1KKZQi03An
+CLIENT_SECRET=oeMgHc0KlMv7Q3h6knz6PeJBxy1FAiSRyUEMNK719IZp3w-E5Yrw4BbtrOushmEi
+API_AUDIENCE=http://localhost:8181
+ACCESS_TOKEN_URL=https://skittishloki.auth0.com/oauth/token
+AUTHORIZE_URL=https://skittishloki.auth0.com/authorize
+CALLBACK_URL=http://localhost:8181/callback
+
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+
+POSTGRES.HOST=
+POSTGRES.PORT=
+POSTGRES.USER=
+POSTGRES.PASSWD=
+POSTGRES.DB=grocery_market
+POSTGRES.DB_TEST=grocery_market_test
+
+SECRET_KEY=
+JWT_PAYLOAD=jwt_payload
+PROFILE_KEY=profile
+TOKENA_KEY=id_key
+TOKENB_KEY=access_key
+
+SWAGGER_URL=/swagger
+API_URL=/static/swagger.json
+
+ITEMS_PER_PAGE=15
+
+TEST_TOKEN=
+```
+
 ## Running the application
 
-First ensure you are working using your created virtual environment; then to run the application, execute:
+First ensure you are working using your created virtual environment; then to run the application, execute the following command at the root of the project:
 
 ```bash
 python app.py
 ```
-
 
 ## Endpoints
 
@@ -84,6 +121,6 @@ psql grocery_market_test < grocery.sql
 python test_api.py
 ```
 
-### Postman Routing Test
+### Postman Routing Tests
 
 Both the Postman routing tests and their results can be found in two json files located in the root directory of the project; they are `udacity-fsnd-udacimarket.postman_collection.json` and `udacity-fsnd-udacimarket.postman_test_run.json`, respectively.
