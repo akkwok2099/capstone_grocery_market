@@ -14,7 +14,5 @@ build/
 *.egg-info/
 
 .env
-.env.old
 error.log
 grocery.sql.design
-requirements copy.txt

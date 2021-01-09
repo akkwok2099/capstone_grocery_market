@@ -37,18 +37,29 @@
           <li class="nav-item mr-2">
             <a class="nav-link" href="/constructions" title="!! Under Construction !!">Orders</a>
           </li>
+          <li class="nav-item mr-2">
+            <a class="nav-link" href="/swaggerLink">Swagger</a>
+          </li>
         </ul>
         {# if accessinfo is not none #}
           <!-- <iframe name="access" id="access">{#accessinfo['access']#}</iframe> -->
         {# endif #}
         {% if userinfo is not none %}
           <div class="mr-2 mt-1">
-            <h6>Welcome {{nickname}}</h6>
+            {% if session.get('profile') %}
+              <h6>Welcome {{nickname}}</h6>
+            {% else %}
+              <h6>Welcome Guest</h6>
+            {% endif %}
           </div>
         {% endif %}
         <form class="form-inline my-2 my-lg-0 mr-5 ml-2">
-          <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
-        </form>
+          {% if session.get('profile') %}
+            <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
+          {% else %}
+            <a class="btn btn-outline-success my-2 my-sm-0" href="/login">Login</a>
+          {% endif %}
+          </form>
       </div>
     </nav>
   </div>

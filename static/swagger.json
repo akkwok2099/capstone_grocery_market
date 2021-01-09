@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "udacimarket-grocery-system.herokuapp.com",
+  "host": "localhost:8181",
   "tags": [
     {
       "name": "aisle",
@@ -78,15 +78,11 @@
         "description": "List all available aisles in the market",
         "operationId": "aisles",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Aisle"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -131,7 +127,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -194,7 +190,7 @@
         "description": "Delete a single aisle",
         "operationId": "delete_aisle",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -252,7 +248,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -312,15 +308,11 @@
         "description": "List all registered customers",
         "operationId": "customers",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Customer"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -365,7 +357,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -433,13 +425,13 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
             "name": "customer",
             "in": "body",
-            "description": "response.form,get",
+            "description": "response.form.get",
             "required": true,
             "schema": {
               "type": "object",
@@ -493,15 +485,11 @@
         "description": "List all departments in the market",
         "operationId": "departments",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Department"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -546,7 +534,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -614,7 +602,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -674,15 +662,11 @@
         "description": "List all available employees in the market (past and present)",
         "operationId": "employees",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Employees"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -727,7 +711,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -795,7 +779,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -855,15 +839,11 @@
         "description": "List all available aisles in the market (past and present)",
         "operationId": "",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Product"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -908,7 +888,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -976,7 +956,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -1036,15 +1016,11 @@
         "description": "List all suppliers (past and present)",
         "operationId": "suppliers",
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "responses": {
           "200": {
-            "description": "Successful",
-            "schema": {
-              "type": "array",
-              "$ref": "#/definitions/Supplier"
-            }
+            "description": "Successful"
           },
           "400": {
             "description": "Bad request"
@@ -1089,7 +1065,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -1157,7 +1133,7 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json"
+          "text/html"
         ],
         "parameters": [
           {
@@ -1439,7 +1415,7 @@
         },
         "name": {
           "type": "string",
-          "example": "doggie"
+          "example": "amazon.com"
         },
         "address": {
           "type": "string"

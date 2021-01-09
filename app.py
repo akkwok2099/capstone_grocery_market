@@ -147,9 +147,9 @@ def after_request(response):
 
 
 class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
+    def __init__(self, description, code):
+        self.description = description
+        self.code = code
 
 
 '''
@@ -195,8 +195,15 @@ def _get_token_auth_header():
             if 'test_permission' in request.headers:
                 return test_token
 
-            access_key = session[conf_access_key]
-            return access_key['access']
+            if conf_access_key in session:
+                access_key = session[conf_access_key]
+                return access_key['access']
+            else:
+                app.logger.info('User is not logged in.')
+                raise AuthError({
+                    "code": "authorization_required",
+                    "description": "User is not logged in"
+                }, 401)
 
     if 'Authorization' not in request.headers:
         app.logger.info('Authorization is expected in header')
@@ -446,6 +453,14 @@ with app.app_context():
         }
     )
 
+    @app.route('/swagger')
+    @requires_login
+    def swagger():
+        # -------------------
+        # Swagger page
+        # -------------------
+        return redirect(url_for('swagger'))
+
     app.register_blueprint(swagger_bp, url_prefix='/swagger')
 
 
@@ -458,15 +473,19 @@ with app.app_context():
 
 @app.route('/')
 @app.route('/home')
-@requires_login
 def home():
     # -------------------
     # Home page
     # -------------------
-    return render_template(
-        'grocery/home.html',
-        nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+    try:
+        return render_template(
+            'grocery/home.html',
+            nickname=session[conf_profile_key]['nickname'] if
+            'POSTMAN_TOKEN' not in request.headers else 'Guest')
+    except KeyError as e:
+        tb = sys.exc_info()
+        app.logger.info(e.with_traceback(tb[2]))
+        return render_template('grocery/home.html')
 
 
 @app.route('/constructions')
@@ -474,10 +493,16 @@ def constructions():
     # -------------------
     # Construction page
     # -------------------
-    return render_template(
-        'errors/construction.html',
-        nickname=session[conf_profile_key]['nickname'] if
-        'POSTMAN_TOKEN' not in request.headers else 'Guest')
+    return render_template('errors/construction.html')
+
+
+@app.route('/swaggerLink')
+@requires_login
+def swagger_link():
+    # -------------------
+    # Swagger page
+    # -------------------
+    return redirect(url_for('swagger'))
 
 # -------------------------------------------------------
 # Aisles
@@ -1599,7 +1624,12 @@ def resource_not_found(error):
 @app.errorhandler(AuthError)
 def auth_error(error):
     app.logger.info('ErrorHandler AuthError called')
-    return render_template('errors/errors.html')
+    return render_template(
+        'errors/errors.html',
+        data=jsonify({
+            'message': error.description,
+            'status_code': error.code
+        }))
 
 
 if __name__ == '__main__':
