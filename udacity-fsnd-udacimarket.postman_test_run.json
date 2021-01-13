@@ -1,7 +1,7 @@
 {
-	"id": "2d607dd2-7b25-499c-a7a2-0efd3c61446b",
+	"id": "67288714-3839-4d61-a9ac-d928ed7e4cab",
 	"name": "udacity-fsnd-udacimarket",
-	"timestamp": "2021-01-09T20:13:12.922Z",
+	"timestamp": "2021-01-13T22:39:16.148Z",
 	"collection_id": "fb47414a-9037-4249-bf16-1bf92e48d2e1",
 	"folder_id": 0,
 	"environment_id": "0",
@@ -12,7 +12,7 @@
 			"id": "22dc5d8a-443e-4639-b8f5-a73795150fee",
 			"name": "/aisles",
 			"url": "http://localhost:8181/aisles",
-			"time": 579,
+			"time": 520,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -32,7 +32,7 @@
 				}
 			},
 			"times": [
-				579
+				520
 			],
 			"allTests": [
 				{
@@ -45,7 +45,7 @@
 			"id": "13ddbd2b-87ec-455e-aa3f-efa0c667c3a5",
 			"name": "/customers",
 			"url": "http://localhost:8181/customers",
-			"time": 546,
+			"time": 520,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -65,7 +65,7 @@
 				}
 			},
 			"times": [
-				546
+				520
 			],
 			"allTests": [
 				{
@@ -78,6 +78,204 @@
 			"id": "12c1d85a-cd9d-4f9c-8b4f-4d19f496d810",
 			"name": "/departments",
 			"url": "http://localhost:8181/departments",
+			"time": 525,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				525
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "47ed42b8-7863-4907-baf3-e0f4de67ceba",
+			"name": "/employees",
+			"url": "http://localhost:8181/employees",
+			"time": 521,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				521
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "18495f32-00dd-4ad7-9819-3b0229d2ee34",
+			"name": "/products",
+			"url": "http://localhost:8181/products",
+			"time": 523,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				523
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "ab53f40f-8951-43e3-a130-61741859ac15",
+			"name": "/suppliers",
+			"url": "http://localhost:8181/suppliers",
+			"time": 513,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				513
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "9f7ca695-14ed-4c89-9150-c149fc0ad650",
+			"name": "/aisles/create",
+			"url": "http://localhost:8181/aisles/create",
+			"time": 528,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				528
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "e148ae01-93e1-47f8-9e41-1c6ab7f5aeea",
+			"name": "/customers/create",
+			"url": "http://localhost:8181/customers/create",
+			"time": 511,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				511
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "345f84a2-e0d3-4cf1-b6e1-a12e5387cc21",
+			"name": "/departments/create",
+			"url": "http://localhost:8181/departments/create",
 			"time": 532,
 			"responseCode": {
 				"code": 200,
@@ -108,42 +306,9 @@
 			]
 		},
 		{
-			"id": "47ed42b8-7863-4907-baf3-e0f4de67ceba",
-			"name": "/employees",
-			"url": "http://localhost:8181/employees",
-			"time": 531,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				531
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "18495f32-00dd-4ad7-9819-3b0229d2ee34",
-			"name": "/products",
-			"url": "http://localhost:8181/products",
+			"id": "635511a9-d38a-4ccc-8430-d28163ce0ee1",
+			"name": "/employees/create",
+			"url": "http://localhost:8181/employees/create",
 			"time": 534,
 			"responseCode": {
 				"code": 200,
@@ -165,171 +330,6 @@
 			},
 			"times": [
 				534
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "ab53f40f-8951-43e3-a130-61741859ac15",
-			"name": "/suppliers",
-			"url": "http://localhost:8181/suppliers",
-			"time": 519,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				519
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "9f7ca695-14ed-4c89-9150-c149fc0ad650",
-			"name": "/aisles/create",
-			"url": "http://localhost:8181/aisles/create",
-			"time": 531,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				531
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "e148ae01-93e1-47f8-9e41-1c6ab7f5aeea",
-			"name": "/customers/create",
-			"url": "http://localhost:8181/customers/create",
-			"time": 548,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				548
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "345f84a2-e0d3-4cf1-b6e1-a12e5387cc21",
-			"name": "/departments/create",
-			"url": "http://localhost:8181/departments/create",
-			"time": 539,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				539
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "635511a9-d38a-4ccc-8430-d28163ce0ee1",
-			"name": "/employees/create",
-			"url": "http://localhost:8181/employees/create",
-			"time": 526,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				526
 			],
 			"allTests": [
 				{
@@ -342,7 +342,7 @@
 			"id": "ce0808dc-7fff-4ba8-8a8d-da8239d3a823",
 			"name": "/products/create",
 			"url": "http://localhost:8181/products/create",
-			"time": 534,
+			"time": 531,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -362,7 +362,7 @@
 				}
 			},
 			"times": [
-				534
+				531
 			],
 			"allTests": [
 				{
@@ -408,7 +408,7 @@
 			"id": "979114b7-2bd1-4301-8290-7a4e06d30f60",
 			"name": "/aisles/10",
 			"url": "http://localhost:8181/aisles/10",
-			"time": 535,
+			"time": 533,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -428,7 +428,7 @@
 				}
 			},
 			"times": [
-				535
+				533
 			],
 			"allTests": [
 				{
@@ -441,7 +441,7 @@
 			"id": "a5085dd3-1ced-4704-a0ca-1e20554d08dc",
 			"name": "/customers/31",
 			"url": "http://localhost:8181/customers/31",
-			"time": 536,
+			"time": 534,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -461,7 +461,7 @@
 				}
 			},
 			"times": [
-				536
+				534
 			],
 			"allTests": [
 				{
@@ -540,7 +540,7 @@
 			"id": "51aed3f1-a707-419d-a7a5-38ca23ac4b84",
 			"name": "/products/426",
 			"url": "http://localhost:8181/products/426",
-			"time": 528,
+			"time": 552,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -560,7 +560,7 @@
 				}
 			},
 			"times": [
-				528
+				552
 			],
 			"allTests": [
 				{
@@ -573,7 +573,7 @@
 			"id": "353341da-80ca-4a76-9e84-70a120d75633",
 			"name": "/suppliers/21",
 			"url": "http://localhost:8181/suppliers/21",
-			"time": 564,
+			"time": 522,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -593,7 +593,7 @@
 				}
 			},
 			"times": [
-				564
+				522
 			],
 			"allTests": [
 				{
@@ -606,7 +606,7 @@
 			"id": "7a21bdb7-ea92-4f8d-b978-6cb004811595",
 			"name": "/aisles/10",
 			"url": "http://localhost:8181/aisles/10",
-			"time": 527,
+			"time": 529,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -626,7 +626,7 @@
 				}
 			},
 			"times": [
-				527
+				529
 			],
 			"allTests": [
 				{
@@ -639,7 +639,7 @@
 			"id": "a1e28c27-16bf-4df4-a863-0ad78311dcde",
 			"name": "/aisles",
 			"url": "http://localhost:8181/aisles",
-			"time": 1123,
+			"time": 861,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -659,7 +659,7 @@
 				}
 			},
 			"times": [
-				1123
+				861
 			],
 			"allTests": [
 				{
@@ -672,7 +672,7 @@
 			"id": "04b97c17-0295-4a7c-b6e2-1780005fcf64",
 			"name": "/customers",
 			"url": "http://localhost:8181/customers",
-			"time": 804,
+			"time": 699,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -692,7 +692,7 @@
 				}
 			},
 			"times": [
-				804
+				699
 			],
 			"allTests": [
 				{
@@ -705,7 +705,7 @@
 			"id": "c2fa0eb3-76a0-4f40-bda7-0448653b5763",
 			"name": "/departments",
 			"url": "http://localhost:8181/departments",
-			"time": 764,
+			"time": 686,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -725,7 +725,7 @@
 				}
 			},
 			"times": [
-				764
+				686
 			],
 			"allTests": [
 				{
@@ -738,7 +738,7 @@
 			"id": "fda33a36-f529-4ec1-af85-15bab28502d4",
 			"name": "/employees",
 			"url": "http://localhost:8181/employees",
-			"time": 926,
+			"time": 732,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -758,7 +758,7 @@
 				}
 			},
 			"times": [
-				926
+				732
 			],
 			"allTests": [
 				{
@@ -771,7 +771,7 @@
 			"id": "700dff16-cde4-4823-99fe-cc52ee6b75f1",
 			"name": "/products",
 			"url": "http://localhost:8181/products",
-			"time": 3896,
+			"time": 1251,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -791,7 +791,7 @@
 				}
 			},
 			"times": [
-				3896
+				1251
 			],
 			"allTests": [
 				{
@@ -804,7 +804,7 @@
 			"id": "7e2dc73a-d2ee-4515-8e5f-5562f7f6d0cf",
 			"name": "/suppliers",
 			"url": "http://localhost:8181/suppliers",
-			"time": 1196,
+			"time": 742,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -824,7 +824,7 @@
 				}
 			},
 			"times": [
-				1196
+				742
 			],
 			"allTests": [
 				{
@@ -837,7 +837,7 @@
 			"id": "3b00b89a-e57a-42f6-b682-613ea190be9a",
 			"name": "/aisles/create",
 			"url": "http://localhost:8181/aisles/create",
-			"time": 1077,
+			"time": 700,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -857,7 +857,7 @@
 				}
 			},
 			"times": [
-				1077
+				700
 			],
 			"allTests": [
 				{
@@ -870,7 +870,7 @@
 			"id": "1973c63f-7b25-4eee-adcb-dd49fb5eb6ef",
 			"name": "/customers/create",
 			"url": "http://localhost:8181/customers/create",
-			"time": 1734,
+			"time": 715,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -890,7 +890,7 @@
 				}
 			},
 			"times": [
-				1734
+				715
 			],
 			"allTests": [
 				{
@@ -903,7 +903,7 @@
 			"id": "728b6bd5-6b27-4f55-908d-4948863ac2bd",
 			"name": "/departments/create",
 			"url": "http://localhost:8181/departments/create",
-			"time": 781,
+			"time": 705,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -923,7 +923,7 @@
 				}
 			},
 			"times": [
-				781
+				705
 			],
 			"allTests": [
 				{
@@ -936,7 +936,7 @@
 			"id": "93611220-1ae3-4fad-a5eb-842ead71d363",
 			"name": "/employees/create",
 			"url": "http://localhost:8181/employees/create",
-			"time": 853,
+			"time": 721,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -956,7 +956,7 @@
 				}
 			},
 			"times": [
-				853
+				721
 			],
 			"allTests": [
 				{
@@ -969,7 +969,7 @@
 			"id": "c3a36896-f0d3-4473-aaca-77a569d2368d",
 			"name": "/products/create",
 			"url": "http://localhost:8181/products/create",
-			"time": 1892,
+			"time": 1271,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -989,7 +989,7 @@
 				}
 			},
 			"times": [
-				1892
+				1271
 			],
 			"allTests": [
 				{
@@ -1002,7 +1002,7 @@
 			"id": "42ce1b2f-4f28-49c3-9807-442cc17dd9be",
 			"name": "/suppliers/create",
 			"url": "http://localhost:8181/suppliers/create",
-			"time": 756,
+			"time": 724,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1022,7 +1022,7 @@
 				}
 			},
 			"times": [
-				756
+				724
 			],
 			"allTests": [
 				{
@@ -1035,7 +1035,7 @@
 			"id": "5cbe92c7-4497-477f-99f6-742962be3101",
 			"name": "/aisles/10",
 			"url": "http://localhost:8181/aisles/10",
-			"time": 695,
+			"time": 812,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1055,7 +1055,7 @@
 				}
 			},
 			"times": [
-				695
+				812
 			],
 			"allTests": [
 				{
@@ -1068,7 +1068,7 @@
 			"id": "4970258e-aae1-4f63-b9f8-708dcec4e8ed",
 			"name": "/customers/31",
 			"url": "http://localhost:8181/customers/31",
-			"time": 764,
+			"time": 704,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1088,7 +1088,7 @@
 				}
 			},
 			"times": [
-				764
+				704
 			],
 			"allTests": [
 				{
@@ -1101,7 +1101,7 @@
 			"id": "87785be3-a69c-4de0-ac37-e609fe828b15",
 			"name": "/departments/1",
 			"url": "http://localhost:8181/departments/1",
-			"time": 733,
+			"time": 702,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1121,7 +1121,7 @@
 				}
 			},
 			"times": [
-				733
+				702
 			],
 			"allTests": [
 				{
@@ -1134,7 +1134,7 @@
 			"id": "ff237827-ee8c-4194-8bc9-ef065b077636",
 			"name": "/employees/1",
 			"url": "http://localhost:8181/employees/1",
-			"time": 810,
+			"time": 742,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1154,7 +1154,7 @@
 				}
 			},
 			"times": [
-				810
+				742
 			],
 			"allTests": [
 				{
@@ -1167,7 +1167,7 @@
 			"id": "63a2d592-ac7d-4c29-b3be-2fb7e0ba10a1",
 			"name": "/products/426",
 			"url": "http://localhost:8181/products/426",
-			"time": 1581,
+			"time": 1231,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1187,7 +1187,7 @@
 				}
 			},
 			"times": [
-				1581
+				1231
 			],
 			"allTests": [
 				{
@@ -1200,7 +1200,7 @@
 			"id": "7fab8602-768e-4f98-863d-0612da416f96",
 			"name": "/suppliers/21",
 			"url": "http://localhost:8181/suppliers/21",
-			"time": 734,
+			"time": 691,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1220,7 +1220,7 @@
 				}
 			},
 			"times": [
-				734
+				691
 			],
 			"allTests": [
 				{
@@ -1233,7 +1233,7 @@
 			"id": "d4fe3b50-bd66-4d74-ae80-19595beceaf2",
 			"name": "/aisles/10",
 			"url": "http://localhost:8181/aisles/10",
-			"time": 727,
+			"time": 707,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1253,7 +1253,7 @@
 				}
 			},
 			"times": [
-				727
+				707
 			],
 			"allTests": [
 				{
@@ -1266,7 +1266,7 @@
 			"id": "26f65fa7-f40a-4c46-bda3-cd736e295917",
 			"name": "/aisles",
 			"url": "http://localhost:8181/aisles",
-			"time": 877,
+			"time": 687,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1286,7 +1286,7 @@
 				}
 			},
 			"times": [
-				877
+				687
 			],
 			"allTests": [
 				{
@@ -1299,7 +1299,7 @@
 			"id": "fe005850-dd09-4bdf-a4ce-cac30eafa110",
 			"name": "/customers",
 			"url": "http://localhost:8181/customers",
-			"time": 717,
+			"time": 693,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1319,7 +1319,7 @@
 				}
 			},
 			"times": [
-				717
+				693
 			],
 			"allTests": [
 				{
@@ -1332,7 +1332,7 @@
 			"id": "a8bb8dab-2dbc-46d4-ba63-ff1aba4a5199",
 			"name": "/departments",
 			"url": "http://localhost:8181/departments",
-			"time": 706,
+			"time": 686,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1352,7 +1352,7 @@
 				}
 			},
 			"times": [
-				706
+				686
 			],
 			"allTests": [
 				{
@@ -1365,7 +1365,7 @@
 			"id": "3836ddda-6b0b-42c0-a7fa-5bd2c056bce5",
 			"name": "/employees",
 			"url": "http://localhost:8181/employees",
-			"time": 710,
+			"time": 669,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1385,7 +1385,7 @@
 				}
 			},
 			"times": [
-				710
+				669
 			],
 			"allTests": [
 				{
@@ -1398,7 +1398,7 @@
 			"id": "26eb0eaa-0227-4116-a326-fc86ebbb96a4",
 			"name": "/products",
 			"url": "http://localhost:8181/products",
-			"time": 1367,
+			"time": 1282,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1418,7 +1418,7 @@
 				}
 			},
 			"times": [
-				1367
+				1282
 			],
 			"allTests": [
 				{
@@ -1431,7 +1431,7 @@
 			"id": "44501957-d14c-49a1-b39b-33c910f6527e",
 			"name": "/suppliers",
 			"url": "http://localhost:8181/suppliers",
-			"time": 745,
+			"time": 713,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1451,7 +1451,7 @@
 				}
 			},
 			"times": [
-				745
+				713
 			],
 			"allTests": [
 				{
@@ -1464,7 +1464,7 @@
 			"id": "5dca6082-cdae-4f5e-9594-20be38c9959a",
 			"name": "/aisles/create",
 			"url": "http://localhost:8181/aisles/create",
-			"time": 714,
+			"time": 738,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1484,7 +1484,7 @@
 				}
 			},
 			"times": [
-				714
+				738
 			],
 			"allTests": [
 				{
@@ -1497,7 +1497,7 @@
 			"id": "e46844f6-0ba5-4b5c-abe9-aa67f99b1afe",
 			"name": "/customers/create",
 			"url": "http://localhost:8181/customers/create",
-			"time": 773,
+			"time": 703,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1517,7 +1517,7 @@
 				}
 			},
 			"times": [
-				773
+				703
 			],
 			"allTests": [
 				{
@@ -1530,204 +1530,6 @@
 			"id": "be91157f-9431-422b-a2af-94be2b6e5d53",
 			"name": "/departments/create",
 			"url": "http://localhost:8181/departments/create",
-			"time": 707,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				707
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "43d530f4-6604-45ce-b502-d8d289689af2",
-			"name": "/employees/create",
-			"url": "http://localhost:8181/employees/create",
-			"time": 707,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				707
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "15abcf80-b65a-4344-b31c-c989e78088d4",
-			"name": "/products/create",
-			"url": "http://localhost:8181/products/create",
-			"time": 1376,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Product iPad Pro 2 was successfully added!": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Product iPad Pro 2 was successfully added!": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				1376
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Product iPad Pro 2 was successfully added!": true
-				}
-			]
-		},
-		{
-			"id": "3035db9c-9c9e-4df1-91c1-545816daa42e",
-			"name": "/suppliers/create",
-			"url": "http://localhost:8181/suppliers/create",
-			"time": 749,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Supplier Apple Inc. was successfully added!": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Supplier Apple Inc. was successfully added!": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				749
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Supplier Apple Inc. was successfully added!": true
-				}
-			]
-		},
-		{
-			"id": "e3e9d61a-5cdc-41e3-919e-2c48e9b010c6",
-			"name": "/aisles/10",
-			"url": "http://localhost:8181/aisles/10",
-			"time": 708,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Authentication and/or authorization error": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Authentication and/or authorization error": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				708
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Authentication and/or authorization error": true
-				}
-			]
-		},
-		{
-			"id": "f171d929-d2b3-42ff-80bf-e7a145a5707d",
-			"name": "/customers/31",
-			"url": "http://localhost:8181/customers/31",
-			"time": 866,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"value contains Customer 31 was successfully updated!": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"value contains Customer 31 was successfully updated!": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				866
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"value contains Customer 31 was successfully updated!": true
-				}
-			]
-		},
-		{
-			"id": "2079252c-eaf0-4179-98f4-d4165ac18d75",
-			"name": "/departments/1",
-			"url": "http://localhost:8181/departments/1",
 			"time": 697,
 			"responseCode": {
 				"code": 200,
@@ -1758,10 +1560,10 @@
 			]
 		},
 		{
-			"id": "347cf622-20c9-4f3c-a0e2-48ab0706a409",
-			"name": "/employees/1",
-			"url": "http://localhost:8181/employees/1",
-			"time": 736,
+			"id": "43d530f4-6604-45ce-b502-d8d289689af2",
+			"name": "/employees/create",
+			"url": "http://localhost:8181/employees/create",
+			"time": 703,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1781,7 +1583,205 @@
 				}
 			},
 			"times": [
-				736
+				703
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "15abcf80-b65a-4344-b31c-c989e78088d4",
+			"name": "/products/create",
+			"url": "http://localhost:8181/products/create",
+			"time": 1249,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Product iPad Pro 2 was successfully added!": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Product iPad Pro 2 was successfully added!": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				1249
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Product iPad Pro 2 was successfully added!": true
+				}
+			]
+		},
+		{
+			"id": "3035db9c-9c9e-4df1-91c1-545816daa42e",
+			"name": "/suppliers/create",
+			"url": "http://localhost:8181/suppliers/create",
+			"time": 731,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Supplier Apple Inc. was successfully added!": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Supplier Apple Inc. was successfully added!": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				731
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Supplier Apple Inc. was successfully added!": true
+				}
+			]
+		},
+		{
+			"id": "e3e9d61a-5cdc-41e3-919e-2c48e9b010c6",
+			"name": "/aisles/10",
+			"url": "http://localhost:8181/aisles/10",
+			"time": 694,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				694
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "f171d929-d2b3-42ff-80bf-e7a145a5707d",
+			"name": "/customers/31",
+			"url": "http://localhost:8181/customers/31",
+			"time": 720,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Customer 31 was successfully updated!": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Customer 31 was successfully updated!": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				720
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Customer 31 was successfully updated!": true
+				}
+			]
+		},
+		{
+			"id": "2079252c-eaf0-4179-98f4-d4165ac18d75",
+			"name": "/departments/1",
+			"url": "http://localhost:8181/departments/1",
+			"time": 682,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				682
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"value contains Authentication and/or authorization error": true
+				}
+			]
+		},
+		{
+			"id": "347cf622-20c9-4f3c-a0e2-48ab0706a409",
+			"name": "/employees/1",
+			"url": "http://localhost:8181/employees/1",
+			"time": 696,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"value contains Authentication and/or authorization error": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"value contains Authentication and/or authorization error": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				696
 			],
 			"allTests": [
 				{
@@ -1794,7 +1794,7 @@
 			"id": "12c0377b-9768-46ed-a69a-0a546c3c4bcf",
 			"name": "/products/426",
 			"url": "http://localhost:8181/products/426",
-			"time": 1653,
+			"time": 1257,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1814,7 +1814,7 @@
 				}
 			},
 			"times": [
-				1653
+				1257
 			],
 			"allTests": [
 				{
@@ -1827,7 +1827,7 @@
 			"id": "d3b4b7b6-da8c-464e-9c84-9078b0acfbac",
 			"name": "/suppliers/21",
 			"url": "http://localhost:8181/suppliers/21",
-			"time": 721,
+			"time": 693,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1847,7 +1847,7 @@
 				}
 			},
 			"times": [
-				721
+				693
 			],
 			"allTests": [
 				{
@@ -1860,7 +1860,7 @@
 			"id": "7925d698-61fe-4ca7-9526-5568e924e392",
 			"name": "/aisles/10",
 			"url": "http://localhost:8181/aisles/10",
-			"time": 760,
+			"time": 829,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1880,7 +1880,7 @@
 				}
 			},
 			"times": [
-				760
+				829
 			],
 			"allTests": [
 				{
@@ -1891,7 +1891,7 @@
 		}
 	],
 	"count": 1,
-	"totalTime": 48345,
+	"totalTime": 40547,
 	"collection": {
 		"requests": [
 			{

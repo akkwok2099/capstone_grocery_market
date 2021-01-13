@@ -34,7 +34,7 @@ class Config(object):
     ITEMS_PER_PAGE = os.environ.get('ITEMS_PER_PAGE')
     SWAGGER_URL = os.environ.get('SWAGGER_URL')
     API_URL = os.environ.get('API_URL')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = \
         os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
-
     TEST_TOKEN = os.environ.get("TEST_TOKEN")

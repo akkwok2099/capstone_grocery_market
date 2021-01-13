@@ -97,7 +97,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -133,7 +133,7 @@
           {
             "in": "path",
             "name": "aisle_number",
-            "description": "Aisle number",
+            "description": "Aisle Number",
             "required": true,
             "type": "string"
           },
@@ -143,10 +143,10 @@
             "description": "response.form.get",
             "required": true,
             "schema": {
-            "type": "object",
+              "type": "object",
               "$ref": "#/definitions/Aisle"
+            }
           }
-        }
         ],
         "responses": {
           "200": {
@@ -165,7 +165,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -196,7 +196,7 @@
           {
             "in": "path",
             "name": "aisle_number",
-            "description": "Aisle number",
+            "description": "Aisle Number",
             "required": true,
             "type": "string"
           }
@@ -327,7 +327,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -361,13 +361,6 @@
         ],
         "parameters": [
           {
-            "in": "path",
-            "name": "customer_id",
-            "description": "Customer ID",
-            "required": true,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "aisle",
             "description": "response.form.get",
@@ -395,7 +388,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -504,7 +497,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -538,13 +531,6 @@
         ],
         "parameters": [
           {
-            "in": "path",
-            "name": "department_id",
-            "description": "Department ID",
-            "required": true,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "department",
             "description": "request.form.get",
@@ -572,7 +558,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -681,7 +667,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -715,13 +701,6 @@
         ],
         "parameters": [
           {
-            "in": "path",
-            "name": "employee_id",
-            "description": "Employee ID",
-            "required": true,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "employee_dto",
             "description": "request.form.get",
@@ -749,7 +728,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -858,7 +837,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -892,13 +871,6 @@
         ],
         "parameters": [
           {
-            "in": "path",
-            "name": "product_id",
-            "description": "Product IDr",
-            "required": true,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "product",
             "description": "request.form.get",
@@ -926,7 +898,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -1035,7 +1007,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"
@@ -1103,7 +1075,7 @@
             "description": "Resources requested could not be found"
           },
           "405": {
-            "description": "Incorrect trnsfer protocol"
+            "description": "Incorrect transfer protocol"
           },
           "500": {
             "description": "Server encountered some sort of issue"

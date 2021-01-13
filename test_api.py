@@ -50,8 +50,8 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 200)
-        self.assertEqual('Welcome Guest' in data, True)
         self.assertEqual('<h2>Manage <b>Aisles</b>' in data, True)
+        self.assertEqual('Welcome Guest' in data, True)
 
     # Fail - Incorrect protocal
     def test_get_all_aisles_post(self):
@@ -109,8 +109,7 @@ class TestApiMethods(unittest.TestCase):
         # being checked in the following assert to make sure
         # it's really a success
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('10' in data, True)
-        self.assertEqual('Silverwares' in data, True)
+        self.assertEqual('/aisles' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_an_aisle_get(self):
@@ -172,8 +171,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Fruits' in data, False)
-        self.assertEqual('Tree+Babies' in data, True)
+        self.assertEqual('/aisles' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_an_aisle_get(self):
@@ -336,7 +334,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Alan+Kwok' in data, True)
+        self.assertEqual('/customers' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_a_customer_get(self):
@@ -402,7 +400,6 @@ class TestApiMethods(unittest.TestCase):
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
         self.assertEqual('Alan+Kwok' in data, False)
-        self.assertEqual('Clark+Kent' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_a_customer_get(self):
@@ -516,7 +513,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Electronics' in data, True)
+        self.assertEqual('/departments' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_a_department_get(self):
@@ -575,8 +572,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Electonics' in data, False)
-        self.assertEqual('Frozens' in data, True)
+        self.assertEqual('/departments' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_a_department_get(self):
@@ -692,8 +688,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Alan+Kwok' in data, True)
-        self.assertEqual('Butcher' in data, True)
+        self.assertEqual('/employees' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_an_employee_get(self):
@@ -770,8 +765,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Butcher' in data, False)
-        self.assertEqual('Baker' in data, True)
+        self.assertEqual('/employees' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_an_employee_get(self):
@@ -907,8 +901,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Noodle' in data, True)
-        self.assertEqual('Campbell' in data, True)
+        self.assertEqual('/products' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_a_product_get(self):
@@ -1006,10 +999,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Noodle' in data, False)
-        self.assertEqual('Campbell' in data, False)
-        self.assertEqual('iPad+Pro+3' in data, True)
-        self.assertEqual('Apple+Inc' in data, True)
+        self.assertEqual('/products' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_a_product_get(self):
@@ -1149,7 +1139,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Fatboy+Wholesale+Ltd' in data, True)
+        self.assertEqual('/suppliers' in data, True)
 
     # Fail - Incorrect protocal
     def test_add_a_supplier_get(self):
@@ -1214,10 +1204,7 @@ class TestApiMethods(unittest.TestCase):
 
         data = result.data.decode('utf8')
         self.assertEqual(result.status_code, 302)
-        self.assertEqual('Fatboy+Wholesale+Ltd' in data, False)
-        self.assertEqual('Chicago' in data, False)
-        self.assertEqual('Amazon' in data, True)
-        self.assertEqual('Seattle' in data, True)
+        self.assertEqual('/suppliers' in data, True)
 
     # Fail - Incorrect protocal
     def test_update_a_supplier_get(self):

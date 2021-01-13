@@ -3,6 +3,16 @@
 ## UdaciMarket Management System
 ### Temporary Location at https://udacimarket-grocery-system.herokuapp.com/
 #
+### Motivation
+
+This project is my attempt to utilize all the techniques and technologies I have learnt from this Nanodegree program (i.e., Python web development through Flask, database management through Postgresql, database migration through Flask-Migration, data manipulation through Flask-SQLAlchemy, authorization and authentication development via a 3rd-party vendor like Auth0, RESTful API programming through Flask-RESTful and Flask-RESTPlus, Python unit testing using unittest, API integration testing using Postman, and implementing a simple CI/CD flow by checking in the code to GitHub and having it automatically deploy the application to Heroku) into one application that mimics a real world scnerio; in addition, I have also tried out some of the things I have learnt that was outside of the class like documenting the API using Swagger-UI and creating a bash script to set up the project initially for development and testing purposes.
+
+
+### Introduction
+
+UdaciMarket Management System is a web based application that allows the UdaciMarket managers and employees to manage product inventories and keep track of business enities like employees, suppliers, and departments. The web application is role-based meaning that managers and employees have different permissions to perform different tasks; for example, we certainly do not want all employees to have the right to look at other employees' Human Resources records. This management system has the potential to expand and be utilized by the customers as well for online ordering if the appropiate security measures and an online payment system are implemented.
+
+
 ### Setting up the Application
 
 
@@ -11,9 +21,17 @@
 Follow instructions to install Python 3.7 for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
 
-#### Run setup.sh
+#### Source setup.sh
 
 A bash script, `setup.sh`, is an initial setup script located in the root of the project. The script assumes that Python 3.7 is installed and defaulted on your machine, and you are starting out fresh from cloning the project. This script will take care of creating the virtual environment, installing application dependencies, generating a `.env`, configuration file which will not be checked into the repository, and creating and setting up both the database and test database for the application. Before opening the browser and running the application at http://localhost:8181, please make sure that the database password is included in the .env file just created.
+
+  A little note though, instead of running the setup script by using `sh setup.sh`, source the setup script by using:
+  
+  ````
+  source setup.sh
+  ````
+
+  This way, you can be certain that the environment variables are correctly setup in the session environment.
 
 The following is a little deeper discussion of what the `setup.sh` is doing:
 
@@ -64,14 +82,6 @@ A `.env` file for defining the following configuation parameters is required to 
 
 The following parameters are required for the `.env` file.
 
-- AUTH0_DOMAIN
-- ALGORITHMS
-- CLIENT_ID
-- CLIENT_SECRET
-- API_AUDIENCE
-- ACCESS_TOKEN_URL
-- AUTHORIZE_URL
-- CALLBACK_URL
 - SQLALCHEMY_TRACK_MODIFICATIONS=False
 - POSTGRES.HOST=127.0.0.1
 - POSTGRES.PORT=5432
@@ -79,7 +89,6 @@ The following parameters are required for the `.env` file.
 - POSTGRES.PASSWD=
 - POSTGRES.DB=grocery_market
 - POSTGRES.DB_TEST=grocery_market_test
-- SECRET_KEY=
 - JWT_PAYLOAD=jwt_payload
 - PROFILE_KEY=profile
 - TOKENA_KEY=id_key
@@ -88,6 +97,21 @@ The following parameters are required for the `.env` file.
 - API_URL=/static/swagger.json
 - ITEMS_PER_PAGE=15
 - TEST_TOKEN
+
+
+* #### Environment variables setup in setup file
+
+The following parameters are required for the setup file.
+
+- AUTH0_DOMAIN
+- ALGORITHMS
+- CLIENT_ID
+- CLIENT_SECRET
+- API_AUDIENCE
+- ACCESS_TOKEN_URL
+- AUTHORIZE_URL
+- CALLBACK_URL
+- SECRET_KEY
 
 
 ### Running the application
@@ -102,6 +126,8 @@ python app.py
 ### Endpoints
 
 Endpoints information is documented via Swagger UI and can be accessed by appending `/swagger` to the host address, for example, http://localhost:8181/swagger.
+
+Note: If you tried out the API from Swagger UI and received a `TypeError: Failed to Fetch` error, that, very likely, can be resolved by selecting a different tranferring scheme. For example, using HTTP for running the application on the Heroku server; Heroku always deploy applications via SSL or HTTPS.
 
 
 ### Error Handling
