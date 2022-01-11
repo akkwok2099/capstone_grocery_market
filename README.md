@@ -56,7 +56,7 @@ This will install all of the required packages within the `requirements.txt` fil
 
 - [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM well use to handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use to handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
@@ -66,11 +66,11 @@ This will install all of the required packages within the `requirements.txt` fil
 
 - [Flask-Authlib-Client](https://docs.authlib.org/en/latest/client/flask.html) is a Flask extension that adds support for separate authorization/resource servers. It extends authlib's flask integration.
 
-- [Python-Jose-Cryptodome](https://pypi.org/project/python-jose-cryptodome/) is a JOSE, which is a framework intened to provide a method to securely transfer claims between parties, implementation in Python using pycryptodome instead pycrypto.
+- [Python-Jose-Cryptodome](https://pypi.org/project/python-jose-cryptodome/) is a JOSE (which is a framework intened to provide a method to securely transfer claims between parties) implementation in Python using pycryptodome instead of pycrypto.
 
 
 * #### Database Setup
-With Postgres running, restore a database using the grocery.sql file provided. From the backend folder in terminal run:
+With PostgresSQL running, restore a database using the grocery.sql file provided. From the backend folder in terminal run:
 
 ```bash
 psql grocery_market < grocery.psql
