@@ -38,12 +38,12 @@ The following is a little deeper discussion of what the `setup.sh` is doing:
 
 * #### Virtual Enviornment
 
-Running the app in an virtual environment is highly recommended. This keeps the dependencies for the project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+Running the app in an virtual environment is highly recommended. This keeps the dependencies for the project separated and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 
 * #### PIP Dependencies
 
-Once the virtual environment is setup and running, we can install application dependencies by naviging to the root of the project and running:
+Once the virtual environment is setup and running, we can install application dependencies by navigating to the root of the project and running:
 
 ```bash
 pip install -r requirements.txt
