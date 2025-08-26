@@ -167,7 +167,7 @@ Helpful Notes for Postman testing:
 > If you receive a Parser Error because of the header size. You could include the `NODE_OPTIONS` parameter in your machine's environment and enter the value `--max-http-header-size=32768`, or set the variable as the following in command prompt `NODE_OPTIONS=--max-http-header-size=32768`. 32,768, in bytes, (32kb) is the header size allowed for each request and/or response in Postman.
 
 
-* #### Application Testers
+* #### Application Testers (Temporary)
 
 Following is the Auth0 login information for several dummy accounts for testing:
 ```
